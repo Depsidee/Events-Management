@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('songs', function (Blueprint $table) {
+        Schema::create('food_homes', function (Blueprint $table) {
             $table->id();
-            $table->integer('song_categories_id') ->references('id')->on('song_categories')->onDelete('cascade');
-            $table->string('song_name');
-            $table->string('song_path');
+            $table->integer('home_reservations_id') ->references('id')->on('home_reservations')->onDelete('cascade');
+            $table->integer('foods_id') ->references('id')->on('foods')->onDelete('cascade');
+            $table->integer('amount');
+            $table->double('total_price');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('songs');
+        Schema::dropIfExists('food_homes');
     }
 };

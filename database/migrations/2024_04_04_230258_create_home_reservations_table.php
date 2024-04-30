@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id') ->references('id')->on('users')->onDelete('cascade');
 
-            $table->integer('food_requests_id') ->references('id')->on('food_requests')->onDelete('cascade');
             $table->integer('decorations_id') ->references('id')->on('decorations')->onDelete('cascade');
             $table->integer('payments_id') ->references('id')->on('payments')->onDelete('cascade');
-
             $table->integer('photography_id') ->references('id')->on('photographies')->onDelete('cascade');
             $table->integer('location_coordinates_id') ->references('id')->on('location_coordinates')->onDelete('cascade');
             $table->boolean('has_recording');

@@ -12,7 +12,6 @@ class HomeReservation extends Model
     protected $fillable = [
         'user_id',
         'decoration_id',
-        'food_request_id',
         'payment_id',
         'photography_id',
         'location_coordinates_id',
