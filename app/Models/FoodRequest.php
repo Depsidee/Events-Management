@@ -11,22 +11,19 @@ class FoodRequest extends Model
 
     protected $fillable = [
         'food_id',
+        'reservation_id',
         'amount',
         'total_price'
     ];
 
     public function food()
     {
-        return $this->hasOne(Food::class);
+        return $this->belongsTo(Food::class);
     }
 
     public function reservation()
     {
-        $this->belongsTo(Reservation::class);
+        return $this->belongsTo(Reservation::class);
     }
-
-    public function homeReservation()
-    {
-        $this->belongsTo(HomeReservation::class);
-    }
+    
 }

@@ -17,6 +17,6 @@ class HallCapacity extends Model
 
     public function hall()
     {
-        $this->belongsTo(Hall::class);
+        return $this->hasOne(Hall::class);
     }
 }

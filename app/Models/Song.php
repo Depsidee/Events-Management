@@ -20,8 +20,8 @@ class Song extends Model
         return $this->belongsTo(SongCategory::class);
     }
 
-    public function reservations()
+    public function songRequests()
     {
-        $this->belongsToMany(Reservation::class);
+        return $this->hasMany(Song::class);
     }
 }

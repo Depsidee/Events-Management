@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('food', function (Blueprint $table) {
             $table->id();
-            $table->integer('food_categories_id') ->references('id')->on('food_categories')->onDelete('cascade');
+            $table->integer('food_category_id') ->references('id')->on('food_categories')->onDelete('cascade');
 
             $table->string ('images_paths');
             $table->float('price');

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('user_name')->unique();
             $table->string('email')->unique();
             $table->integer('phone_number')->unique();
-            $table->string('password')->unique();
+            $table->string('password');
             $table->string('role_name') ->references('name')->on('roles')->onDelete('cascade');
             $table->string('profile_image')->nullable();
             $table->timestamp('email_verified_at')->nullable();

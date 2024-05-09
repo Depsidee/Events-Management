@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('views', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id') ->references('id')->on('users')->onDelete('cascade');
-            $table->integer('halls_id') ->references('id')->on('halls')->onDelete('cascade');
+            $table->integer('hall_id') ->references('id')->on('halls')->onDelete('cascade');
 
             $table->integer('stars');
             $table->text('comment');

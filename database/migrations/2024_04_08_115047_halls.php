@@ -15,12 +15,11 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id') ->references('id')->on('users')->onDelete('cascade');
             $table->integer('location_coordinates_id') ->references('id')->on('location_coordinates')->onDelete('cascade');
-            $table->integer('work_times_id') ->references('id')->on('work_times')->onDelete('cascade');
-            $table->integer('hall_capacities_id') ->references('id')->on('hall_capacities')->onDelete('cascade');
-            $table->integer('ratings_id') ->references('id')->on('ratings')->onDelete('cascade');
+            $table->integer('work_time_id') ->references('id')->on('work_times')->onDelete('cascade');
+            $table->integer('hall_capacity_id') ->references('id')->on('hall_capacities')->onDelete('cascade');
+            $table->integer('rating_id') ->references('id')->on('ratings')->onDelete('cascade');
             $table->integer('hall_type_id') ->references('id')->on('hall_types')->onDelete('cascade');
             $table->string('name');
-            $table->string('region');
             $table->float('space');
             $table->float('price_per_hour');
             $table->string('license_image')->nullable();

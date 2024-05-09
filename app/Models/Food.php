@@ -22,6 +22,11 @@ class Food extends Model
     
     public function foodRequests()
     {
-        return $this->belongsToMany(FoodRequest::class);
+        return $this->hasMany(FoodRequest::class);
+    }
+
+    public function foodHomes()
+    {
+        return $this->hasMany(FoodHome::class);
     }
 }

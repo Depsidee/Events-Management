@@ -16,11 +16,11 @@ class Payment extends Model
 
     public function reservation()
     {
-        $this->belongsTo(Reservation::class);
+        return $this->hasOne(Reservation::class);
     }
 
     public function homeReservation()
     {
-        $this->belongsTo(HomeReservation::class);
+        return $this->hasOne(HomeReservation::class);
     }
 }

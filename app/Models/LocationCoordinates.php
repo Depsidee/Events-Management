@@ -18,11 +18,11 @@ class LocationCoordinates extends Model
 
     public function hall()
     {
-        $this->belongsTo(Hall::class);
+        return $this->hasOne(Hall::class);
     }
 
     public function homeReservation()
     {
-        $this->belongsTo(HomeReservation::class);
+        return $this->hasOne(HomeReservation::class);
     }
 }

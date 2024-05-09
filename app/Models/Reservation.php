@@ -32,31 +32,31 @@ class Reservation extends Model
 
     public function hall()
     {
-        return $this->hasOne(Hall::class);
+        return $this->belongsTo(Hall::class);
     }
 
     public function decoration()
     {
-        return $this->hasOne(Decoration::class);
+        return $this->belongsTo(Decoration::class);
     }
 
     public function foodRequest()
     {
-        return $this->hasOne(FoodRequest::class);
+        return $this->hasMany(FoodRequest::class);
     }
 
     public function payment()
     {
-        return $this->hasOne(Payment::class);
+        return $this->belongsTo(Payment::class);
     }
 
     public function photography()
     {
-        return $this->hasOne(Photography::class);
+        return $this->belongsTo(Photography::class);
     }
 
-    public function song()
+    public function songRequests()
     {
-        return $this->hasOne(Song::class);
+        return $this->hasMany(Song::class);
     }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('food_homes', function (Blueprint $table) {
             $table->id();
-            $table->integer('home_reservations_id') ->references('id')->on('home_reservations')->onDelete('cascade');
-            $table->integer('foods_id') ->references('id')->on('foods')->onDelete('cascade');
+            $table->integer('home_reservation_id') ->references('id')->on('home_reservations')->onDelete('cascade');
+            $table->integer('food_id') ->references('id')->on('foods')->onDelete('cascade');
             $table->integer('amount');
             $table->double('total_price');
             $table->timestamps();

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('song_requests', function (Blueprint $table) {
             $table->id();
-            $table->integer('reservations_id') ->references('id')->on('reservations')->onDelete('cascade');
-            $table->integer('songs_id') ->references('id')->on('songs')->onDelete('cascade');
+            $table->integer('reservation_id') ->references('id')->on('reservations')->onDelete('cascade');
+            $table->integer('song_id') ->references('id')->on('songs')->onDelete('cascade');
             $table->timestamps();
         });
     }

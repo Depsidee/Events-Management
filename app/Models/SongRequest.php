@@ -10,7 +10,17 @@ class SongRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'reservations_id',
-        'songs_id'
+        'reservation_id',
+        'song_id'
     ];
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function song()
+    {
+        return $this->belongsTo(Song::class);
+    }
 }

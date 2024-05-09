@@ -16,11 +16,11 @@ class Photography extends Model
 
     public function reservations()
     {
-        $this->belongsToMany(Reservation::class);
+        return $this->hasMany(Reservation::class);
     }
 
     public function homeReservations()
     {
-        $this->belongsToMany(HomeReservation::class);
+        return $this->hasMany(HomeReservation::class);
     }
 }

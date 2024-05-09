@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
-            $table->integer('song_categories_id') ->references('id')->on('song_categories')->onDelete('cascade');
+            $table->integer('song_category_id') ->references('id')->on('song_categories')->onDelete('cascade');
             $table->string('song_name');
             $table->string('song_path');
             $table->timestamps();

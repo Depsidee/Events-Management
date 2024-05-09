@@ -27,51 +27,51 @@ class Hall extends Model
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function location()
+    public function locationCoordinates()
     {
-        $this->hasOne(LocationCoordinates::class);
+        return $this->belongsTo(LocationCoordinates::class);
     }
 
     public function workTime()
     {
-        $this->hasOne(WorkTime::class);
+        return $this->belongsTo(WorkTime::class);
     }
 
     public function hallCapacity()
     {
-        $this->hasOne(HallCapacity::class);
+        return $this->belongsTo(HallCapacity::class);
     }
 
     public function rating()
     {
-        $this->hasOne(Rating::class);
+        return $this->belongsTo(Rating::class);
     }
 
     public function hallType()
     {
-        $this->belongsTo(HallType::class);
+        return $this->belongsTo(HallType::class);
     }
 
     public function favorites()
     {
-        $this->belongsToMany(Favorite::class);
+        return $this->hasMany(Favorite::class);
     }
 
     public function protests()
     {
-        $this->belongsToMany(Protest::class);
+        return $this->hasMany(Protest::class);
     }
 
     public function views()
     {
-        $this->belongsToMany(View::class);
+        return $this->hasMany(View::class);
     }
 
     public function reservations()
     {
-        $this->belongsToMany(Reservation::class);
+        return $this->hasMany(Reservation::class);
     }
 }

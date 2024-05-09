@@ -56,42 +56,42 @@ class User extends Authenticatable
 
     public function wallet()
     {
-        $this->hasOne(Wallet::class);
+        return $this->hasOne(Wallet::class);
     }
 
     public function notifications()
     {
-        $this->hasMany(Notification::class);
+        return $this->hasMany(Notification::class);
     }
 
     public function halls()
     {
-        $this->hasMany(Hall::class);
+        return $this->hasMany(Hall::class);
     }
 
     public function favorites()
     {
-        $this->hasMany(Favorite::class);
+        return $this->hasMany(Favorite::class);
     }
 
     public function protests()
     {
-        $this->hasMany(Protest::class);
+        return $this->hasMany(Protest::class);
     }
 
     public function views()
     {
-        $this->hasMany(View::class);
+        return $this->hasMany(View::class);
     }
 
     public function reservations()
     {
-        $this->hasMany(Reservation::class);
+        return $this->hasMany(Reservation::class);
     }
 
     public function homeReservations()
     {
-        $this->hasMany(HomeReservation::class);
+        return $this->hasMany(HomeReservation::class);
     }
 
     public function roles()

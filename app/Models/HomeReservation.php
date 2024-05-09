@@ -29,26 +29,26 @@ class HomeReservation extends Model
 
     public function decoration()
     {
-        return $this->hasOne(Decoration::class);
-    }
-
-    public function foodRequest()
-    {
-        return $this->hasOne(FoodRequest::class);
+        return $this->belongsTo(Decoration::class);
     }
 
     public function payment()
     {
-        return $this->hasOne(Payment::class);
+        return $this->belongsTo(Payment::class);
     }
 
     public function photography()
     {
-        return $this->hasOne(Photography::class);
+        return $this->belongsTo(Photography::class);
     }
 
     public function locationCoordinates()
     {
-        return $this->hasOne(locationCoordinates::class);
+        return $this->belongsTo(locationCoordinates::class);
+    }
+
+    public function foodHomes()
+    {
+        return $this->hasMany(FoodHome::class);
     }
 }

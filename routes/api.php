@@ -60,3 +60,5 @@ Route::get('showPersonalInfo/{id}', [App\Http\Controllers\userController::class,
 Route::post('update/user/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo']);
 
 });});
+
+Route::get('index',[App\Http\Controllers\HallController::class,'index']);

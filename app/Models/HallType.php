@@ -15,6 +15,6 @@ class HallType extends Model
 
     public function halls()
     {
-        $this->hasMany(Hall::class);
+        return $this->hasMany(Hall::class);
     }
 }
