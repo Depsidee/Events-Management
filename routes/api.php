@@ -62,3 +62,13 @@ Route::post('update/user/{id}', [App\Http\Controllers\userController::class, 'up
 });});
 
 Route::get('index',[App\Http\Controllers\HallController::class,'index']);
+Route::post('hallFromCoordinates',[App\Http\Controllers\HallController::class,'hallFromCoordinates']);
+Route::get('showAccordingRating',[App\Http\Controllers\HallController::class,'showAccordingRating']);
+Route::get('lowestPrice',[App\Http\Controllers\HallController::class,'lowestPrice']);
+Route::get('highestPrice',[App\Http\Controllers\HallController::class,'highestPrice']);
+Route::get('lowestSpace',[App\Http\Controllers\HallController::class,'lowestSpace']);
+Route::get('highestSpace',[App\Http\Controllers\HallController::class,'highestSpace']);
+Route::get('hallDetails/{id}',[App\Http\Controllers\HallController::class,'hallDetails']);
+Route::get('hallViews/{id}',[App\Http\Controllers\HallController::class,'hallViews']);
+Route::post('update/{id}',[App\Http\Controllers\HallController::class,'update']);
+Route::post('search',[App\Http\Controllers\HallController::class,'hallsAccordingQuestions']);

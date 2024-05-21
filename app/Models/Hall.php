@@ -60,9 +60,9 @@ class Hall extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    public function protests()
+    public function reports()
     {
-        return $this->hasMany(Protest::class);
+        return $this->hasMany(Report::class);
     }
 
     public function views()
