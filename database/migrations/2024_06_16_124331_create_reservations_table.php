@@ -14,15 +14,16 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id') ->references('id')->on('users')->onDelete('cascade');
-            $table->integer('halls_id') ->references('id')->on('halls')->onDelete('cascade');
+            $table->integer('hall_id') ->references('id')->on('halls')->onDelete('cascade');
+            $table->integer('reservation_type_id') ->references('id')->on('reservation_types')->onDelete('cascade');
             $table->integer('photography_id') ->references('id')->on('photographies')->onDelete('cascade');
             $table->integer('payment_id') ->references('id')->on('payments')->onDelete('cascade');
             $table->integer('decoration_id') ->references('id')->on('decorations')->onDelete('cascade');
-            $table->boolean('has_recording');
+            $table->boolean('has_recorded');
             $table->date('date');
             $table->integer('period');
-            $table->dateTime('start_time');
-            $table->float('total_price');
+            $table->time('start_time');
+            $table->decimal('total_price',10,2);;
             $table->boolean('children_permission');
             $table->boolean('transportation');
             $table->boolean('guest_photography');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('song_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('type',$allowed=['joys','wedding','birthday']);
+            $table->string('type')->unique();
             $table->timestamps();
         });
     }

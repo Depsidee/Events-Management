@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('song_category_id') ->references('id')->on('song_categories')->onDelete('cascade');
             $table->string('song_name');
-            $table->string('song_path');
+            $table->string('song')->nullable();
             $table->timestamps();
         });
     }

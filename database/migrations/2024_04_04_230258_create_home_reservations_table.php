@@ -22,8 +22,8 @@ return new class extends Migration
             $table->boolean('has_recording');
             $table->date('date');
             $table->integer('period');
-            $table->dateTime('start_time');
-            $table->float('total_price');
+            $table->time('start_time');
+            $table->decimal('total_price',10,2);
             $table->timestamps();
         });
     }

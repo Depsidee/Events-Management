@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('hall_types', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',$allowed=['open','closed','hotel']);
+            $table->string('type')->unique();
             $table->timestamps();
         });
     }

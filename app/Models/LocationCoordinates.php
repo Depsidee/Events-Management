@@ -13,7 +13,7 @@ class LocationCoordinates extends Model
         'name',
         'description',
         'latitude',
-        'langitude'
+        'longitude'
     ];
 
     public function hall()

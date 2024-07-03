@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('home_reservation_id') ->references('id')->on('home_reservations')->onDelete('cascade');
             $table->integer('food_id') ->references('id')->on('foods')->onDelete('cascade');
             $table->integer('amount');
-            $table->double('total_price');
+            $table->decimal('total_price',10,2);;
             $table->timestamps();
         });
     }

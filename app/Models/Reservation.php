@@ -15,7 +15,8 @@ class Reservation extends Model
         'decoration_id',
         'payment_id',
         'photography_id',
-        'has_recording',
+        'reservation_type_id',
+        'has_recorded',
         'date',
         'period',
         'start_time',
@@ -33,6 +34,11 @@ class Reservation extends Model
     public function hall()
     {
         return $this->belongsTo(Hall::class);
+    }
+
+    public function reservationType()
+    {
+        return $this->belongsTo(ReservationType::class);
     }
 
     public function decoration()
@@ -55,8 +61,8 @@ class Reservation extends Model
         return $this->belongsTo(Photography::class);
     }
 
-    public function songRequests()
+    public function songRequest()
     {
-        return $this->hasMany(Song::class);
+        return $this->hasMany(SongRequest::class);
     }
 }

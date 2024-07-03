@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('decorations', function (Blueprint $table) {
             $table->id();
             $table->integer('decoration_category_id') ->references('id')->on('decoration_categories')->onDelete('cascade');
-           $table->string('images_paths');
-            $table->float('price');
+            $table->string('image')->nullable();
+            $table->decimal('price',10,2);
             $table->timestamps();
         });
     }

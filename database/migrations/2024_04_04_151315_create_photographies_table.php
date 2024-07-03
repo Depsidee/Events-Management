@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('photographies', function (Blueprint $table) {
             $table->id();
             $table->string("photographer_name");
-            $table->float('price');
+            $table->decimal('price',10,2);
             $table->timestamps();
         });
     }

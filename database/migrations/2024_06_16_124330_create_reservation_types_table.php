@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('food_requests', function (Blueprint $table) {
+        Schema::create('reservation_types', function (Blueprint $table) {
             $table->id();
-            $table->integer('reservation_id') ->references('id')->on('reservations')->onDelete('cascade');
-            $table->integer('food_id') ->references('id')->on('foods')->onDelete('cascade');
-            $table->integer('amount');
-            $table->decimal('total_price',10,2);
+            $table->string('type')->unique();
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('food_requests');
+        Schema::dropIfExists('reservation_types');
     }
 };

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth ;
 use App\Models\Hall;
+use App\Models\User;
 use App\Models\HallCapacity;
 use App\Models\View;
 use App\Models\LocationCoordinates;
 use App\Models\Rating;
+use App\Models\WorkTime;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +18,15 @@ class HallController extends Controller
 {
     public function index()
     {
-        $halls = Hall::all();
+        if(Auth::user()->role_name=='admin_hall')
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
+        $halls = Hall::
+                where('has_recorded','=','1')
+                ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+                ->get();
 
         if($halls->count()<1){
             return response([
@@ -23,18 +34,96 @@ class HallController extends Controller
             ]);
         }
 
-        return Hall::
-        with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get();
+        return $halls;
 
+    }
+
+    public function unrecordedHalls()
+    {
+        if(!(Auth::user()->role_name=='admin'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
+        $halls = Hall::
+                where('has_recorded','=','0')
+                ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+                ->get();
+        
+        if($halls->count()<1)
+        {
+            return response([
+                'message'=>'There are no unrecorded halls'
+            ]);
+        }
+
+        return $halls;
+    }
+
+    public function acceptHall($id)
+    {
+        if(!(Auth::user()->role_name=='admin'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
+        $hall = Hall::find($id);
+        if($hall==null)
+        {
+            return response([
+                'message'=>'There is no hall with such id'
+            ],404);
+        }
+        if($hall['has_recorded'])
+        {
+            return response([
+                'message'=>'This hall is already accepted'
+            ]);
+        }
+        $hall['Has_recorded']=1;
+        $hall->save();
+        return response([
+            'message'=>'This hall has been accepted successfully'
+        ]);
+    }
+
+    public function rejectHall($id)
+    {
+        if(!(Auth::user()->role_name=='admin'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
+        $hall = Hall::where('id','=',$id)->first();
+        if($hall==null)
+        {
+            return response([
+                'message'=>'There is no hall with such id'
+            ],404);
+        }
+        if($hall['has_recorded'])
+        {
+            return response([
+                'message'=>'This hall is already accepted'
+            ]);
+        }
+        User::where('id','=',$hall['user_id'])->delete();
+        LocationCoordinates::where('id','=',$hall['location_coordinates_id'])->delete();
+        WorkTime::where('id','=',$hall['work_time_id'])->delete();
+        HallCapacity::where('id','=',$hall['hall_capacity_id'])->delete();
+        Rating::where('id','=',$hall['rating_id'])->delete();
+        Hall::where('id','=',$id)->delete();
+        return response([
+            'message'=>'This hall and its owner have been deleted successfully'
+        ]);
     }
 
     public function hallDetails($id)
     {
         $hall = Hall::
-        with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get()
-        ->where('id',$id);
+            with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->get()
+            ->where('id',$id);
         if($hall->count()<1)
         {
             return response([
@@ -50,13 +139,18 @@ class HallController extends Controller
     {
         $request->validate([
             'latitude'=>'required|numeric',
-            'langitude'=>'required|numeric'
+            'longitude'=>'required|numeric'
         ]);
 
+        if(!(Auth::user()->role_name=='user'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $locationCoordinates = LocationCoordinates::
-        where('latitude',$request->latitude)
-        ->where('langitude',$request->langitude)
-        ->first();
+            where('latitude',$request->latitude)
+            ->where('longitude',$request->longitude)
+            ->first();
         if($locationCoordinates==null)
         {
             return response([
@@ -66,9 +160,10 @@ class HallController extends Controller
 
         $locationCoordinates_id = $locationCoordinates->id;
         $hall = Hall::
-        with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get()
-        ->where('location_coordinates_id',$locationCoordinates_id);
+            with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->get()
+            ->where('location_coordinates_id',$locationCoordinates_id)
+            ->where('has_recorded','=','1');
         if($hall==null)
         {
             return response([
@@ -81,6 +176,11 @@ class HallController extends Controller
 
     public function showAccordingRating()
     {
+        if(!(Auth::user()->role_name=='user'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $ratings = Rating::query()->orderBy('points','desc')->get();
         if($ratings->count()<1)
         {
@@ -92,10 +192,15 @@ class HallController extends Controller
         $halls = array();
         foreach($ratings as $rating)
         {
-            $halls[] = Hall::
+            $hall = Hall::
             where('rating_id','=',$rating->id)
+            ->where('has_recorded','=','1')
             ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-            ->get();
+            ->first();
+            if($hall!=null)
+            {
+            $halls[] = $hall;
+            }
         }
         return $halls;
 
@@ -103,10 +208,16 @@ class HallController extends Controller
 
     public function lowestPrice()
     {
+        if(!(Auth::user()->role_name=='user'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $halls = Hall::
-        query()->orderBy('price_per_hour')
-        ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get();
+            query()->orderBy('price_per_hour')
+            ->where('has_recorded','=','1')
+            ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->get();
         if($halls->count()<1)
         {
             return response([
@@ -119,10 +230,16 @@ class HallController extends Controller
 
     public function highestPrice()
     {
+        if(!(Auth::user()->role_name=='user'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $halls = Hall::
-        query()->orderBy('price_per_hour','desc')
-        ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get();
+            query()->orderBy('price_per_hour','desc')
+            ->where('has_recorded','=','1')
+            ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->get();
         if($halls->count()<1)
         {
             return response([
@@ -133,12 +250,18 @@ class HallController extends Controller
         return $halls;
     }
 
-    public function lowestSpace()
+    public function smallestSpace()
     {
+        if(!(Auth::user()->role_name=='user'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $halls = Hall::
-        query()->orderBy('space')
-        ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get();
+            query()->orderBy('space')
+            ->where('has_recorded','=','1')
+            ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->get();
         if($halls->count()<1)
         {
             return response([
@@ -149,12 +272,18 @@ class HallController extends Controller
         return $halls;
     }
 
-    public function highestSpace()
+    public function largestSpace()
     {
+        if(!(Auth::user()->role_name=='user'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $halls = Hall::
-        query()->orderBy('space','desc')
-        ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get();
+            query()->orderBy('space','desc')
+            ->where('has_recorded','=','1')
+            ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->get();
         if($halls->count()<1)
         {
             return response([
@@ -168,7 +297,7 @@ class HallController extends Controller
     public function hallViews($id)
     {
         $hall = Hall::find($id);
-        if($hall->count()<1)
+        if($hall==null)
         {
             return response([
                 'message'=>'There is no hall with such id.'
@@ -186,8 +315,13 @@ class HallController extends Controller
         return $views;
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request)
     {
+        if(!(Auth::user()->role_name=='admin_hall'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $request->validate([
             'location_name'=>'string|required_with:location_description,location_latitude,location_langitude',
             'location_description'=>'string|required_with:location_name,location_latitude,location_langitude',
@@ -208,8 +342,8 @@ class HallController extends Controller
             'panorama_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,license_image,external_image',
             'external_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,license_image,panorama_image',
         ]);
-
-        $hall = Hall::find($id);
+        $user_id = auth()->user()->id;
+        $hall = Hall::where('user_id','=',$user_id)->first();
         if($hall==null)
         {
             return response([
@@ -303,11 +437,12 @@ class HallController extends Controller
             $hall->save();
         }
         
+        $id = $hall->id;
         $hall = Hall::
-        with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->get()
-        ->where('id','=',$id)
-        ->first();
+            with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->get()
+            ->where('id','=',$id)
+            ->first();
         return response([
             'message'=>'The hall has been updated successfully.',
             'hall'=>$hall
@@ -316,6 +451,11 @@ class HallController extends Controller
 
     public function hallsAccordingQuestions(Request $request)
     {
+        if(!(Auth::user()->role_name=='user'))
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
+
         $request->validate([
             'location_name'=>'required|string',
             'hall_capacity'=>'required|integer',
@@ -334,9 +474,11 @@ class HallController extends Controller
         $max_price = $price+100000;
 
         $locationCoordinates = LocationCoordinates::
-        where('name','like','%'.$location.'%')->get();
+            where('name','like','%'.$location.'%')
+            ->get();
         $hallCapacity = HallCapacity::
-        whereBetween('recommended',[$min_capacity,$max_capacity])->get();
+            whereBetween('recommended',[$min_capacity,$max_capacity])
+            ->get();
 
         if($locationCoordinates->count()<1||$hallCapacity->count()<1)
         {
@@ -346,12 +488,13 @@ class HallController extends Controller
         }
 
         $halls = Hall::
-        with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
-        ->whereBelongsTo($locationCoordinates)
-        ->whereBelongsTo($hallCapacity)
-        ->whereBetween('price_per_hour',[$min_price,$max_price])
-        ->where('hall_type_id',$typeId)
-        ->get();
+            with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            ->whereBelongsTo($locationCoordinates)
+            ->whereBelongsTo($hallCapacity)
+            ->whereBetween('price_per_hour',[$min_price,$max_price])
+            ->where('hall_type_id',$typeId)
+            ->where('has_recorded','=','1')
+            ->get();
 
         if($halls->count()<1)
         {

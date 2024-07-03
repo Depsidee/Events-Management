@@ -17,6 +17,7 @@ class Hall extends Model
         'rating_id',
         'hall_type_id',
         'name',
+        'has_recordrd',
         'space',
         'price_per_hour',
         'license_image',

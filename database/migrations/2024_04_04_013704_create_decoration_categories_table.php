@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('decoration_categories', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',$allowed=['joys','condolences']);
+            $table->string('type')->unique();
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ class Decoration extends Model
 
     protected $fillable = [
         'decoration_category_id',
-        'images_paths',
+        'image',
         'price'
     ];
 

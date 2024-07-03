@@ -20,8 +20,9 @@ return new class extends Migration
             $table->integer('rating_id') ->references('id')->on('ratings')->onDelete('cascade');
             $table->integer('hall_type_id') ->references('id')->on('hall_types')->onDelete('cascade');
             $table->string('name');
+            $table->boolean('has_recorded');
             $table->float('space');
-            $table->float('price_per_hour');
+            $table->decimal('price_per_hour',10,2);
             $table->string('license_image')->nullable();
             $table->string('panorama_image')->nullable();
             $table->string('external_image')->nullable();

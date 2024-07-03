@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('food_categories', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',$allowed=['appetizer','main_course','dessert']);
+            $table->string('type')->unique();
             $table->timestamps();
         });
     }

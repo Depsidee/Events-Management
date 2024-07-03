@@ -11,8 +11,8 @@ class Song extends Model
 
     protected $fillable = [
         'song_category_id',
-        'singer_name',
-        'price'
+        'song_name',
+        'song'
     ];
 
     public function SongCategory()
@@ -22,6 +22,6 @@ class Song extends Model
 
     public function songRequests()
     {
-        return $this->hasMany(Song::class);
+        return $this->hasMany(SongRequest::class);
     }
 }
