@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
-            $table->integer('song_category_id') ->references('id')->on('song_categories')->onDelete('cascade');
+            $table->unsignedBigInteger('song_category_id');
+            $table->foreign('song_category_id')->references('id')->on('song_categories');
             $table->string('song_name');
             $table->string('song')->nullable();
             $table->timestamps();

@@ -21,15 +21,16 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->count(10)->create();
+        // User::factory()->count(10)->create();
 
-    /* User::create([
-        'user_name' => 'super_admin',
-        'email' => 'super_admin@gmail.com',
-        'phone_number'=>'0954862737',
-        'password' => 'password',
-        'role_name'=>'admin'
-    ]); */
+
+        User::create([
+            'user_name' => 'superAdmin',
+            'email' => 'super_admin@gmail.com',
+            'phone_number'=>'0954862737',
+            'role_name'=>'super_admin',
+            'password' => 'password',
+        ]);
 
 // //Role Admin
 

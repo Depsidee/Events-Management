@@ -13,14 +13,20 @@ return new class extends Migration
     {
         Schema::create('halls', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id') ->references('id')->on('users')->onDelete('cascade');
-            $table->integer('location_coordinates_id') ->references('id')->on('location_coordinates')->onDelete('cascade');
-            $table->integer('work_time_id') ->references('id')->on('work_times')->onDelete('cascade');
-            $table->integer('hall_capacity_id') ->references('id')->on('hall_capacities')->onDelete('cascade');
-            $table->integer('rating_id') ->references('id')->on('ratings')->onDelete('cascade');
-            $table->integer('hall_type_id') ->references('id')->on('hall_types')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id') ->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('location_coordinates_id');
+            $table->foreign('location_coordinates_id') ->references('id')->on('location_coordinates')->onDelete('cascade');
+            $table->unsignedBigInteger('work_time_id');
+            $table->foreign('work_time_id')->references('id')->on('work_times')->onDelete('cascade');
+            $table->unsignedBigInteger('hall_capacity_id');
+            $table->foreign('hall_capacity_id') ->references('id')->on('hall_capacities')->onDelete('cascade');
+            $table->unsignedBigInteger('rating_id')->nullable();
+            $table->foreign('rating_id')->references('id')->on('ratings')->onDelete('cascade');
+            $table->unsignedBigInteger('hall_type_id');
+            $table->foreign('hall_type_id') ->references('id')->on('hall_types')->onDelete('cascade');
             $table->string('name');
-            $table->boolean('has_recorded');
+            $table->boolean('has_recorded')->default(false);
             $table->float('space');
             $table->decimal('price_per_hour',10,2);
             $table->string('license_image')->nullable();

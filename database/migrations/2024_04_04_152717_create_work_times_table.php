@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('work_times', function (Blueprint $table) {
             $table->id();
-            $table->time('open_time');
-            $table->time('close_time');
+            $table->time('open_time')->date_format('H:m');
+            $table->time('close_time')->date_format('H:m');
             $table->timestamps();
         });
     }

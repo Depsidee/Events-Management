@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('song_categories', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('type')->unique();
             $table->timestamps();
         });

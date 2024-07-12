@@ -11,6 +11,10 @@ class HallTypeController extends Controller
 {
     public function index()
     {
+        if(Auth::user()->role_name=='admin_hall')
+        {
+            return $this->sendError('you don\'t have permission' ,'' ,403);
+        }
         $type = HallType::all();
         if($type->count()<1)
         {

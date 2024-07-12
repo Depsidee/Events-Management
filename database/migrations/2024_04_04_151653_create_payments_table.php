@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->enum('status',$allowed=['paid','unpaid','semi-paid']);
+            $table->string('status')->default('Unpaid');
             $table->decimal('amount',10,2);
             $table->timestamps();
         });

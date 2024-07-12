@@ -14,7 +14,7 @@ use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class HallController extends Controller
+class HallController extends BaseController
 {
     public function index()
     {
@@ -40,7 +40,7 @@ class HallController extends Controller
 
     public function unrecordedHalls()
     {
-        if(!(Auth::user()->role_name=='admin'))
+        if(!(Auth::user()->role_name=='super_admin'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -49,7 +49,7 @@ class HallController extends Controller
                 where('has_recorded','=','0')
                 ->with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
                 ->get();
-        
+
         if($halls->count()<1)
         {
             return response([
@@ -62,7 +62,7 @@ class HallController extends Controller
 
     public function acceptHall($id)
     {
-        if(!(Auth::user()->role_name=='admin'))
+        if(!(Auth::user()->role_name=='super_admin'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -89,11 +89,12 @@ class HallController extends Controller
 
     public function rejectHall($id)
     {
-        if(!(Auth::user()->role_name=='admin'))
+        if(!(Auth::user()->role_name=='super_admin'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
+        
         $hall = Hall::where('id','=',$id)->first();
         if($hall==null)
         {
@@ -142,7 +143,7 @@ class HallController extends Controller
             'longitude'=>'required|numeric'
         ]);
 
-        if(!(Auth::user()->role_name=='user'))
+        if(!(Auth::user()->role_name=='client'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -176,7 +177,7 @@ class HallController extends Controller
 
     public function showAccordingRating()
     {
-        if(!(Auth::user()->role_name=='user'))
+        if(!(Auth::user()->role_name=='client'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -208,7 +209,7 @@ class HallController extends Controller
 
     public function lowestPrice()
     {
-        if(!(Auth::user()->role_name=='user'))
+        if(!(Auth::user()->role_name=='client'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -230,7 +231,7 @@ class HallController extends Controller
 
     public function highestPrice()
     {
-        if(!(Auth::user()->role_name=='user'))
+        if(!(Auth::user()->role_name=='client'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -252,7 +253,7 @@ class HallController extends Controller
 
     public function smallestSpace()
     {
-        if(!(Auth::user()->role_name=='user'))
+        if(!(Auth::user()->role_name=='client'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -274,7 +275,7 @@ class HallController extends Controller
 
     public function largestSpace()
     {
-        if(!(Auth::user()->role_name=='user'))
+        if(!(Auth::user()->role_name=='client'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
@@ -323,10 +324,10 @@ class HallController extends Controller
         }
 
         $request->validate([
-            'location_name'=>'string|required_with:location_description,location_latitude,location_langitude',
-            'location_description'=>'string|required_with:location_name,location_latitude,location_langitude',
-            'location_latitude'=>'numeric|required_with:location_name,location_description,location_langitude',
-            'location_langitude'=>'numeric|required_with:location_name,location_description,location_latitude',
+            'location_name'=>'string|required_with:location_description,location_latitude,location_longitude',
+            'location_description'=>'string|required_with:location_name,location_latitude,location_longitude',
+            'location_latitude'=>'numeric|required_with:location_name,location_description,location_longitude',
+            'location_longitude'=>'numeric|required_with:location_name,location_description,location_latitude',
 
             'open_time'=>'date_format:H:i:s|required_with:close_time',
             'close_time'=>'date_format:H:i:s|required_with:open_time',
@@ -334,13 +335,13 @@ class HallController extends Controller
             'hall_capacity_maximum'=>'integer|required_with:hall_capacity_minimum',
             'hall_capacity_minimum'=>'integer|required_with:hall_capacity_maximum',
 
-            'hall_type_id'=>'integer|min:1|max:3|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,name,space,price_per_hour,license_image,panorama_image,external_image',
-            'name'=>'string|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,space,price_per_hour,license_image,panorama_image,external_image',
-            'space'=>'numeric|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,price_per_hour,license_image,panorama_image,external_image',
-            'price_per_hour'=>'numeric|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,license_image,panorama_image,external_image',
-            'license_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,panorama_image,external_image',
-            'panorama_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,license_image,external_image',
-            'external_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_langitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,license_image,panorama_image',
+            'hall_type_id'=>'integer|min:1|max:3|required_without_all:location_name,location_description,location_latitude,location_longitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,name,space,price_per_hour,license_image,panorama_image,external_image',
+            'name'=>'string|required_without_all:location_name,location_description,location_latitude,location_longitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,space,price_per_hour,license_image,panorama_image,external_image',
+            'space'=>'numeric|required_without_all:location_name,location_description,location_latitude,location_longitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,price_per_hour,license_image,panorama_image,external_image',
+            'price_per_hour'=>'numeric|required_without_all:location_name,location_description,location_latitude,location_longitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,license_image,panorama_image,external_image',
+            'license_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_longitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,panorama_image,external_image',
+            'panorama_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_longitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,license_image,external_image',
+            'external_image'=>'image|required_without_all:location_name,location_description,location_latitude,location_longitude,open_time,close_time,hall_capacity_maximum,hall_capacity_minimum,hall_type_id,name,space,price_per_hour,license_image,panorama_image',
         ]);
         $user_id = auth()->user()->id;
         $hall = Hall::where('user_id','=',$user_id)->first();
@@ -357,7 +358,7 @@ class HallController extends Controller
             $locationCoordinates->name = $request->get('location_name');
             $locationCoordinates->description = $request->get('location_description');
             $locationCoordinates->latitude = $request->get('location_latitude');
-            $locationCoordinates->langitude = $request->get('location_langitude');
+            $locationCoordinates->longitude = $request->get('location_longitude');
             $locationCoordinates->save();
         }
 
@@ -436,7 +437,7 @@ class HallController extends Controller
             $hall->external_image = $path.$fileName;
             $hall->save();
         }
-        
+
         $id = $hall->id;
         $hall = Hall::
             with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
@@ -451,7 +452,7 @@ class HallController extends Controller
 
     public function hallsAccordingQuestions(Request $request)
     {
-        if(!(Auth::user()->role_name=='user'))
+        if(!(Auth::user()->role_name=='client'))
         {
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }

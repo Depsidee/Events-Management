@@ -15,5 +15,6 @@ class songCategorySeeder extends Seeder
     {
         $joys = SongCategory::create(['type'=>'joys']);
         $birthday = SongCategory::create(['type'=>'birthday']);
+        SongCategory::create(['type'=>'wedding']);
     }
 }

@@ -13,13 +13,17 @@ return new class extends Migration
     {
         Schema::create('home_reservations', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id') ->references('id')->on('users')->onDelete('cascade');
-
-            $table->integer('decoration_id') ->references('id')->on('decorations')->onDelete('cascade');
-            $table->integer('payment_id') ->references('id')->on('payments')->onDelete('cascade');
-            $table->integer('photography_id') ->references('id')->on('photographies')->onDelete('cascade');
-            $table->integer('location_coordinates_id') ->references('id')->on('location_coordinates')->onDelete('cascade');
-            $table->boolean('has_recording');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id') ->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('decoration_id');
+            $table->foreign('decoration_id') ->references('id')->on('decorations')->onDelete('cascade');
+            $table->unsignedBigInteger('payment_id');
+            $table->foreign('payment_id') ->references('id')->on('payments')->onDelete('cascade');
+            $table->unsignedBigInteger('photography_id');
+            $table->foreign('photography_id') ->references('id')->on('photographies')->onDelete('cascade');
+            $table->unsignedBigInteger('location_coordinates_id');
+            $table->foreign('location_coordinates_id') ->references('id')->on('location_coordinates')->onDelete('cascade');
+            $table->boolean('has_recording')->default(false);
             $table->date('date');
             $table->integer('period');
             $table->time('start_time');
