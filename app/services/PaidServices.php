@@ -27,13 +27,18 @@ class PaidServices
             if ($valledate->fails()) {
                 return ['Validate your data', $valledate->errors()];
             }
-
+            $wallet_client = Wallet::where('user_id',  Auth::user()->id)->first();
+            if ($wallet_client) {
+           return['You already have a wallet'] ;}
+           else{
             $wallet = Wallet::create([
                 'user_id' => Auth::id(),
                 'balance' => $request->balance,
             ]);
-
             return [$wallet, 'create wallet done successfully'];
+           }
+
+
         } else {
             return ['you don\'t have permission', 403];
         }
@@ -48,7 +53,7 @@ class PaidServices
             'balance' => ['required', 'numeric', 'min:0', 'max:99999999.99']
         ]);
         if (Auth::user()->role_name == 'client') {
-            $wallet = Wallet::where('user_id', Auth::user()->id)->get();
+            $wallet = Wallet::where('user_id', Auth::user()->id)->first();
             $wallet = Wallet::find($id);
             $newBalance = $wallet->balance + $request->balance;
             $wallet->update(['balance' => $newBalance]);

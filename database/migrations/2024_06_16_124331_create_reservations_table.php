@@ -26,13 +26,14 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_id');
             $table->foreign('payment_id') ->references('id')->on('payments')->onDelete('cascade');
             $table->boolean('has_recorded')->default(false);
-            $table->date('date');
+            $table->date('date')->format('Y-m-d');
             $table->integer('period');
             $table->time('start_time');
-            $table->decimal('total_price',10,2);;
+            $table->decimal('total_price',10,2);
             $table->boolean('children_permission');
             $table->boolean('transportation');
             $table->boolean('guest_photography');
+            $table->timestamp('delete_time')->nullable()->format('Y-m-d');
             $table->timestamps();
         });
     }
@@ -42,6 +43,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        // Schema::dropIfExists('reservations');
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->dropColumn('delete_time');
+        });
     }
 };

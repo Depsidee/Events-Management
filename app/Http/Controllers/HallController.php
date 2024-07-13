@@ -94,7 +94,7 @@ class HallController extends BaseController
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
-        
+
         $hall = Hall::where('id','=',$id)->first();
         if($hall==null)
         {
@@ -410,7 +410,7 @@ class HallController extends BaseController
             $file= $request->file('license_image');
             $extension = $file->getClientOriginalExtension();
             $fileName = time().'.license.'.$extension;
-            $path = 'update/hall/license/';
+            $path = 'halls/update/';
             $file->move($path,$fileName);
             $hall->license_image = $path.$fileName;
             $hall->save();
@@ -421,7 +421,7 @@ class HallController extends BaseController
             $file= $request->file('panorama_image');
             $extension = $file->getClientOriginalExtension();
             $fileName = time().'.panorama.'.$extension;
-            $path = 'update/hall/panorama/';
+            $path = 'halls/update/';
             $file->move($path,$fileName);
             $hall->panorama_image = $path.$fileName;
             $hall->save();
@@ -432,7 +432,7 @@ class HallController extends BaseController
             $file = $request->file('external_image');
             $extension = $file->getClientOriginalExtension();
             $fileName = time().'.external.'.$extension;
-            $path = 'update/hall/external/';
+            $path = 'halls/update/';
             $file->move($path,$fileName);
             $hall->external_image = $path.$fileName;
             $hall->save();

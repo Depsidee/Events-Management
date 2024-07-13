@@ -49,6 +49,10 @@ Route::prefix('super_admin')->group(function () {
         Route::get('indexReservations', [App\Http\Controllers\ReservationController::class, 'index']);
         Route::post('acceptReservation/{id}', [App\Http\Controllers\ReservationController::class, 'acceptReservation']);
         Route::get('rejectReservation/{id}', [App\Http\Controllers\ReservationController::class, 'rejectReservation']);
+        Route::get('pendingReservations', [App\Http\Controllers\ReservationController::class, 'pendingReservations']);
+        Route::get('allPreviousReservations', [App\Http\Controllers\ReservationController::class, 'allPreviousReservations']);
+        Route::get('allUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'allUpcomingReservations']);
+
 
     });
 });
@@ -72,6 +76,9 @@ Route::prefix('admin_hall')->group(function () {
         Route::post('update', [App\Http\Controllers\HallController::class, 'update']);
         //reservation
         Route::get('hallReservations', [App\Http\Controllers\ReservationController::class, 'hallReservations']);
+        Route::get('hallPreviousReservations', [App\Http\Controllers\ReservationController::class, 'hallPreviousReservations']);
+        Route::get('hallUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'hallUpcomingReservations']);
+
     });
 });
 
@@ -114,5 +121,9 @@ Route::prefix('client')->group(function () {
         Route::post('updateReservation', [App\Http\Controllers\ReservationController::class, 'updateReservation']);
         Route::delete('deleteReservation/{id}', [App\Http\Controllers\ReservationController::class, 'deleteReservation']);
         Route::get('userReservations', [App\Http\Controllers\ReservationController::class, 'userReservations']);
+        Route::get('reservationDates/{id}', [App\Http\Controllers\ReservationController::class, 'reservationDates']);
+        Route::get('userPreviousReservations', [App\Http\Controllers\ReservationController::class, 'userPreviousReservations']);
+        Route::get('userUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'userUpcomingReservations']);
+
     });
 });

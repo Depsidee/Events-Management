@@ -23,9 +23,10 @@ class Reservation extends Model
         'total_price',
         'children_permission',
         'transportation',
-        'guest_photography'
+        'guest_photography',
+        'delete_time'
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -53,7 +54,7 @@ class Reservation extends Model
 
     public function payment()
     {
-        return $this->belongsTo(Payment::class);
+        return $this->belongsTo(Payment::class, 'payment_id');
     }
 
     public function photography()
@@ -65,4 +66,8 @@ class Reservation extends Model
     {
         return $this->hasMany(SongRequest::class);
     }
+    protected $dates = [
+        'delete_time',
+    ];
+
 }
