@@ -29,7 +29,7 @@ Route::prefix('super_admin')->group(function () {
         Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout']);
         Route::post('update/Admin/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo_Admin']);
         //wallet
-        Route::get('showWalllet', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
+        Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         //song
         Route::post('create/song', [App\Http\Controllers\songController::class, 'create']);
         Route::post('update/song/{id}', [App\Http\Controllers\songController::class, 'updateSong']);
@@ -52,8 +52,13 @@ Route::prefix('super_admin')->group(function () {
         Route::get('pendingReservations', [App\Http\Controllers\ReservationController::class, 'pendingReservations']);
         Route::get('allPreviousReservations', [App\Http\Controllers\ReservationController::class, 'allPreviousReservations']);
         Route::get('allUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'allUpcomingReservations']);
+        //food
 
-
+        Route::apiResource('foods', \App\Http\Controllers\FoodController::class);
+        Route::apiResource('food_categories', \App\Http\Controllers\FoodCategoryController::class);
+        //decorations
+        Route::apiResource('decoration_categories', \App\Http\Controllers\DecorationCategoryController::class);
+        Route::apiResource('decorations', \App\Http\Controllers\DecorationController::class);
     });
 });
 
@@ -69,7 +74,8 @@ Route::prefix('admin_hall')->group(function () {
 
         Route::get('showPersonalInfo/{id}', [App\Http\Controllers\userController::class, 'showPersonalInfo']);
         Route::post('update/user/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo']);
-        Route::get('showWalllet', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
+        ///wallet
+        Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
 
         //hall
         Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
@@ -78,7 +84,6 @@ Route::prefix('admin_hall')->group(function () {
         Route::get('hallReservations', [App\Http\Controllers\ReservationController::class, 'hallReservations']);
         Route::get('hallPreviousReservations', [App\Http\Controllers\ReservationController::class, 'hallPreviousReservations']);
         Route::get('hallUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'hallUpcomingReservations']);
-
     });
 });
 
@@ -96,6 +101,9 @@ Route::prefix('client')->group(function () {
         Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout']);
         Route::get('showPersonalInfo/{id}', [App\Http\Controllers\userController::class, 'showPersonalInfo']);
         Route::post('update/user/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo']);
+        //song
+        Route::get('show/song', [App\Http\Controllers\songController::class, 'index']);
+
         ///paid
         Route::get('paid/{id}', [App\Http\Controllers\PaidController::class, 'paid']);
         ///wallet
@@ -124,6 +132,9 @@ Route::prefix('client')->group(function () {
         Route::get('reservationDates/{id}', [App\Http\Controllers\ReservationController::class, 'reservationDates']);
         Route::get('userPreviousReservations', [App\Http\Controllers\ReservationController::class, 'userPreviousReservations']);
         Route::get('userUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'userUpcomingReservations']);
-
+        //favorite
+        Route::post('favorite/add', [App\Http\Controllers\FavoriteController::class, 'changeStatus']);
+        Route::get('favorite', [App\Http\Controllers\FavoriteController::class, 'index']);
+        Route::get('index_withfavorite', [App\Http\Controllers\HallController::class, 'index_withfavorite']);
     });
 });

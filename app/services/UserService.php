@@ -35,23 +35,21 @@ class UserService
         if ($validator->fails()) {
             return ['Validate your data', $validator->errors()];
         }
-        $role_name = 'client';
-        if($request->has('profile_image'))
-        {
-            $file= $request->file('profile_image');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time().'.profile_image.'.$extension;
-            $path = 'users/storagee/';
-            $file->move($path,$fileName);
 
-        }
+        $role_name = 'client';
+        $file= $request->file('profile_image');
+        $extension = $file->getClientOriginalExtension();
+        $profile_image = time().'.profile_image.'.$extension;
+        $path = 'users/storagee/';
+        $file->move($path,$profile_image);
+
         $user = User::query()->create([
             'user_name' => $request->user_name,
             'phone_number' => $request->phone_number,
             'email' => $request->email,
             'password' => Hash::make('password'),
             'role_name' => $role_name,
-            'profile_image' =>$fileName
+            'profile_image' =>$profile_image
         ]);
         $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
         $success['user_name'] = $user->user_name;

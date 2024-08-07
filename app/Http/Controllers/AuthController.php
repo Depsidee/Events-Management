@@ -28,15 +28,48 @@ $this->UserService=$UserService;
 
     public function Register(Request $request)
     {
+        {
+            $input = $request->all();
+            $validator = Validator::make($input, [
+                'user_name' => ['required', 'unique:users', 'max:10', 'min:4', 'string', 'regex:/^[a-zA-Z]+$/'],
+                'phone_number' => ['required', 'unique:users', 'digits:10'],
+                'email' => ['required', 'unique:users', new GmailValidation],
+                'password' => ['required', 'min:9', 'max:15'],
+                'profile_image' =>  'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return ['Validate your data', $validator->errors()];
+            }
 
-        try {
-      $data = [];
-        $data = $this->UserService->register($request);
-            return ($data);
-        } catch (Throwable $th) {
+            $role_name = 'client';
 
-            $message = $th->getMessage();
-            return $this->sendError($data, $message);
+            $fileName = null;
+
+            if ($request->hasFile('profile_image')) {
+                $file = $request->file('profile_image');
+                $extension = $file->getClientOriginalExtension();
+                $fileName = time().'.profile_image.'.$extension;
+                $path = 'users/storagee/';
+                $file->move($path, $fileName);
+            }
+
+            $user = User::query()->create([
+                'user_name' => $request->user_name,
+                'phone_number' => $request->phone_number,
+                'email' => $request->email,
+                'password' => Hash::make('password'),
+                'role_name' => $role_name,
+                'profile_image' => $fileName,
+            ]);
+            $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
+            $success['user_name'] = $user->user_name;
+            $success['phone_number'] = $user->phone_number;
+            $success['email'] = $user->email;
+            $success['profile_image'] = $user->profile_image;
+            $success['role_name'] = $user->role_name;
+
+            $message = 'registration done successfully';
+            return [$success, $message];
         }
     }
 
