@@ -41,7 +41,7 @@ $this->UserService=$UserService;
                 return ['Validate your data', $validator->errors()];
             }
 
-      
+
 
             $fileName = null;
            $path=null;
@@ -59,7 +59,7 @@ $this->UserService=$UserService;
                'user_name' => $request->user_name,
                'phone_number' => $request->phone_number,
                'email' => $request->email,
-               'password' => Hash::make('password'),
+               'password' => Hash::make($request->password),
                'role_name' => $role_name,
                'profile_image' => $path.$fileName
            ]);
@@ -136,7 +136,7 @@ $this->UserService=$UserService;
                     'user_name' => $request->user_name,
                     'phone_number' => $request->phone_number,
                     'email' => $request->email,
-                    'password' => Hash::make('password'),
+                    'password' => Hash::make($request->password),
                     'role_name' => $role_name,
                     'profile_image' => $path.$fileName
                 ]);
@@ -248,25 +248,55 @@ $this->UserService=$UserService;
 
 
 
-    public function Login(Request $request){
-        $request->validate([
-            'email'=>'required|email',
-            'password'=>'required',
+//     public function Login(Request $request){
+//         $request->validate([
+//             'email'=>'required|email',
+//             'password'=>'required',
 
-        ]);
-        $user=User::where('email',$request->email)->first();
-        if(!$user){
-            return response()->json([
-                'message'=>'email is wrong',
-            ]);
-        }
-        if(!Hash::isHashed($user->password, $request->password)){
-            return response()->json([
-                'message'=>'password is wrong',
-            ]);
-        }
-        $token= $user->createToken('MyAppToken')->accessToken;
+//         ]);
+//         $user=User::where('email',$request->email)->first();
+//         if(!$user){
+//             return response()->json([
+//                 'message'=>'email is wrong',
+//             ]);
+//         }
+//         if(!Hash::isHashed($user->password, $request->password)){
+//             return response()->json([
+//                 'message'=>'password is wrong',
+//             ]);
+//         }
+//         $token= $user->createToken('MyAppToken')->accessToken;
+//         return response()->json([
+//             'token'=>$token,'user'=>$user
+//         ]);}
+
+
+public function Login(Request $request){
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
         return response()->json([
-            'token'=>$token,'user'=>$user
-        ]);}
+            'message' => 'email is wrong',
+        ]);
+    }
+
+    if (!Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'message' => 'password is wrong',
+        ]);
+    }
+
+    $token = $user->createToken('MyAppToken')->accessToken;
+
+    return response()->json([
+        'token' => $token,
+        'user' => $user
+    ]);
 }
+
+ }
