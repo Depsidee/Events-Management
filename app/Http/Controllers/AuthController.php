@@ -41,26 +41,29 @@ $this->UserService=$UserService;
                 return ['Validate your data', $validator->errors()];
             }
 
-            $role_name = 'client';
+      
 
             $fileName = null;
+           $path=null;
 
-            if ($request->hasFile('profile_image')) {
-                $file = $request->file('profile_image');
-                $extension = $file->getClientOriginalExtension();
-                $fileName = time().'.profile_image.'.$extension;
-                $path = 'users/storagee/';
-                $file->move($path, $fileName);
-            }
 
-            $user = User::query()->create([
-                'user_name' => $request->user_name,
-                'phone_number' => $request->phone_number,
-                'email' => $request->email,
-                'password' => Hash::make('password'),
-                'role_name' => $role_name,
-                'profile_image' => $path.$fileName
-            ]);
+           $file= $request->file('profile_image');
+           $extension = $file->getClientOriginalExtension();
+           $fileName = time().'.profile_image.'.$extension;
+           $path = 'users/storagee/';
+           $file->move($path,$fileName);
+
+
+           $role_name = 'client';
+           $user = User::query()->create([
+               'user_name' => $request->user_name,
+               'phone_number' => $request->phone_number,
+               'email' => $request->email,
+               'password' => Hash::make('password'),
+               'role_name' => $role_name,
+               'profile_image' => $path.$fileName
+           ]);
+
             $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
             $success['user_name'] = $user->user_name;
             $success['phone_number'] = $user->phone_number;
@@ -87,7 +90,7 @@ $this->UserService=$UserService;
                 'email' => ['required', 'unique:users', new GmailValidation],
                 'password' => ['required', 'min:9', 'max:15'],
 
-                'profile_image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
+                'profile_image' => 'file|mimes:jpg,jpeg,png,gif|max:2048',
                 //hall:
                 'name' => ['required', 'string'],
                 'price_per_hour' => 'required',
