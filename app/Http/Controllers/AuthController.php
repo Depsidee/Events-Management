@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Throwable;
 use App\Services\UserService;
 use App\Http\Requests\clientRequest;
@@ -12,23 +13,23 @@ use App\Models\LocationCoordinates;
 use App\Models\Hall;
 use App\Models\HallCapacity;
 use App\Models\WorkTime;
-use Illuminate\Support\Facades\Auth ;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Rules\GmailValidation;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+
 class AuthController extends BaseController
 
 {
     private UserService $UserService;
     public function __construct(UserService $UserService)
     {
-$this->UserService=$UserService;
+        $this->UserService = $UserService;
     }
 
     public function Register(Request $request)
-    {
-        {
+    { {
             $input = $request->all();
             $validator = Validator::make($input, [
                 'user_name' => ['required', 'unique:users', 'max:10', 'min:4', 'string', 'regex:/^[a-zA-Z]+$/'],
@@ -44,25 +45,25 @@ $this->UserService=$UserService;
 
 
             $fileName = null;
-           $path=null;
+            $path = null;
 
 
-           $file= $request->file('profile_image');
-           $extension = $file->getClientOriginalExtension();
-           $fileName = time().'.profile_image.'.$extension;
-           $path = 'users/storagee/';
-           $file->move($path,$fileName);
+            $file = $request->file('profile_image');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time() . '.profile_image.' . $extension;
+            $path = 'users/storagee/';
+            $file->move($path, $fileName);
 
 
-           $role_name = 'client';
-           $user = User::query()->create([
-               'user_name' => $request->user_name,
-               'phone_number' => $request->phone_number,
-               'email' => $request->email,
-               'password' => Hash::make($request->password),
-               'role_name' => $role_name,
-               'profile_image' => $path.$fileName
-           ]);
+            $role_name = 'client';
+            $user = User::query()->create([
+                'user_name' => $request->user_name,
+                'phone_number' => $request->phone_number,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role_name' => $role_name,
+                'profile_image' => $path . $fileName
+            ]);
 
             $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
             $success['user_name'] = $user->user_name;
@@ -82,143 +83,141 @@ $this->UserService=$UserService;
     public function Register_adminHall(Request $request)
     {
 
-            $input = $request->all();
-            $validator = Validator::make($input, [
-                //user_admin_hall:
-                'user_name' => ['required', 'unique:users', 'max:10', 'min:4', 'string', 'regex:/^[a-zA-Z]+$/'],
-                'phone_number' => ['required', 'unique:users', 'digits:10'],
-                'email' => ['required', 'unique:users', new GmailValidation],
-                'password' => ['required', 'min:9', 'max:15'],
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            //user_admin_hall:
+            'user_name' => ['required', 'unique:users', 'max:10', 'min:4', 'string', 'regex:/^[a-zA-Z]+$/'],
+            'phone_number' => ['required', 'unique:users', 'digits:10'],
+            'email' => ['required', 'unique:users', new GmailValidation],
+            'password' => ['required', 'min:9', 'max:15'],
 
-                'profile_image' => 'file|mimes:jpg,jpeg,png,gif|max:2048',
-                //hall:
-                'name' => ['required', 'string'],
-                'price_per_hour' => 'required',
-                'space' => 'required',
-                'license_image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
-                'external_image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
-                'panorama_image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
-                //work Time:
-                'close_time' => 'required',
-                'open_time' => 'required',
-                //
-                //location:
-                //
-                'name_region' => ['required', 'string'],
-                'description_region' => ['required', 'string'],
-                'longitude' => 'required',
-                'latitude' => 'required',
-                // HallCapacity:
-                'minimum' => 'required',
-                'maximum' => 'required',
+            'profile_image' => 'file|mimes:jpg,jpeg,png,gif|max:2048',
+            //hall:
+            'name' => ['required', 'string'],
+            'price_per_hour' => 'required',
+            'space' => 'required',
+            'license_image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
+            'external_image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
+            'panorama_image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048',
+            //work Time:
+            'close_time' => 'required',
+            'open_time' => 'required',
+            //
+            //location:
+            //
+            'name_region' => ['required', 'string'],
+            'description_region' => ['required', 'string'],
+            'longitude' => 'required',
+            'latitude' => 'required',
+            // HallCapacity:
+            'minimum' => 'required',
+            'maximum' => 'required',
 
-                "hall_type_id" => 'required'
+            "hall_type_id" => 'required'
 
-            ]);
+        ]);
 
-            if ($validator->fails()) {
-                return ['Validate your data', $validator->errors()];
-            }
+        if ($validator->fails()) {
+            return ['Validate your data', $validator->errors()];
+        }
 
-                ///////
-                //create user
-                /////
+        ///////
+        //create user
+        /////
 
-                $file= $request->file('profile_image');
-                $extension = $file->getClientOriginalExtension();
-                $fileName = time().'.profile_image.'.$extension;
-                $path = 'users/storagee/';
-                $file->move($path,$fileName);
-
-
-                $role_name = 'admin_hall';
-                $user = User::query()->create([
-                    'user_name' => $request->user_name,
-                    'phone_number' => $request->phone_number,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'role_name' => $role_name,
-                    'profile_image' => $path.$fileName
-                ]);
+        $file = $request->file('profile_image');
+        $extension = $file->getClientOriginalExtension();
+        $fileName = time() . '.profile_image.' . $extension;
+        $path = 'users/storagee/';
+        $file->move($path, $fileName);
 
 
-                //////////////
-                //create work time:
-                //////////////
-
-                $Work_time = WorkTime::create([
-                    'open_time' => $request->open_time,
-                    'close_time' => $request->close_time
-                ]);
-                ///////
-                ////create location
-                //////////
-                $location_coordinate = LocationCoordinates::create([
-                    'name' => $request->name_region,
-                    'description' => $request->description_region,
-                    'latitude' => $request->latitude,
-                    'longitude' => $request->longitude
-                ]);
-                /////////
-                ///create hall capacity
-                /////////
-                $recommended = ($request->minimum + $request->maximum) / 2;
-
-                $hall_capacity = HallCapacity::create([
-                    'minimum' => $request->minimum,
-                    'maximum' => $request->maximum,
-                    'recommended' => $recommended,
-
-                ]);
-                ///////
-                //create hall
-                /////////
-
-                    $file= $request->file('license_image');
-                    $extension = $file->getClientOriginalExtension();
-                    $license_image = time().'.license_image.'.$extension;
-                    $path = 'halls/storagee/';
-                    $file->move($path,$license_image);
+        $role_name = 'admin_hall';
+        $user = User::query()->create([
+            'user_name' => $request->user_name,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_name' => $role_name,
+            'profile_image' => $path . $fileName
+        ]);
 
 
+        //////////////
+        //create work time:
+        //////////////
 
-                    $file= $request->file('external_image');
-                    $extension = $file->getClientOriginalExtension();
-                    $external_image = time().'.external_image.'.$extension;
-                    $path = 'halls/storagee/';
-                    $file->move($path,$external_image);
+        $Work_time = WorkTime::create([
+            'open_time' => $request->open_time,
+            'close_time' => $request->close_time
+        ]);
+        ///////
+        ////create location
+        //////////
+        $location_coordinate = LocationCoordinates::create([
+            'name' => $request->name_region,
+            'description' => $request->description_region,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
+        ]);
+        /////////
+        ///create hall capacity
+        /////////
+        $recommended = ($request->minimum + $request->maximum) / 2;
+
+        $hall_capacity = HallCapacity::create([
+            'minimum' => $request->minimum,
+            'maximum' => $request->maximum,
+            'recommended' => $recommended,
+
+        ]);
+        ///////
+        //create hall
+        /////////
+
+        $file = $request->file('license_image');
+        $extension = $file->getClientOriginalExtension();
+        $license_image = time() . '.license_image.' . $extension;
+        $path = 'halls/storagee/';
+        $file->move($path, $license_image);
 
 
-                    $file= $request->file('panorama_image');
-                    $extension = $file->getClientOriginalExtension();
-                    $panorama_image = time().'.panorama_image.'.$extension;
-                    $path = 'halls/storagee/';
-                    $file->move($path,$panorama_image);
+
+        $file = $request->file('external_image');
+        $extension = $file->getClientOriginalExtension();
+        $external_image = time() . '.external_image.' . $extension;
+        $path = 'halls/storagee/';
+        $file->move($path, $external_image);
 
 
-                $hall = Hall::create(
-                    [
-                        'user_id' => $user->id,
-                        'name' => $request->name,
-                        'location_coordinates_id' => $location_coordinate->id,
-                        'hall_type_id' => $request->hall_type_id,
-                        'hall_capacity_id' => $hall_capacity->id,
-                        'price_per_hour' => $request->price_per_hour,
-                        'space' => $request->space,
-                        'work_time_id' => $Work_time->id,
-                        'license_image' => $path.$license_image,
-                        'external_image' =>  $path.$external_image,
-                        'panorama_image' =>  $path.$panorama_image,
-
-                    ]
-                );
-                $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
+        $file = $request->file('panorama_image');
+        $extension = $file->getClientOriginalExtension();
+        $panorama_image = time() . '.panorama_image.' . $extension;
+        $path = 'halls/storagee/';
+        $file->move($path, $panorama_image);
 
 
-                $message = 'user and your hall is created successfully';
-                return [$success, $user, $hall, $hall_capacity, $location_coordinate, $Work_time, $message];
+        $hall = Hall::create(
+            [
+                'user_id' => $user->id,
+                'name' => $request->name,
+                'location_coordinates_id' => $location_coordinate->id,
+                'hall_type_id' => $request->hall_type_id,
+                'hall_capacity_id' => $hall_capacity->id,
+                'price_per_hour' => $request->price_per_hour,
+                'space' => $request->space,
+                'work_time_id' => $Work_time->id,
+                'license_image' => $path . $license_image,
+                'external_image' =>  $path . $external_image,
+                'panorama_image' =>  $path . $panorama_image,
+
+            ]
+        );
+        $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
 
 
+        $message = 'user and your hall is created successfully';
+        return [$success, $user, $hall, $hall_capacity, $location_coordinate, $Work_time, $message];
     }
 
 
@@ -246,57 +245,32 @@ $this->UserService=$UserService;
     /////////////
 
 
+    public function Login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
+        $user = User::where('email', $request->email)->first();
 
-//     public function Login(Request $request){
-//         $request->validate([
-//             'email'=>'required|email',
-//             'password'=>'required',
+        if (!$user) {
+            return response()->json([
+                'message' => 'email is wrong',
+            ]);
+        }
 
-//         ]);
-//         $user=User::where('email',$request->email)->first();
-//         if(!$user){
-//             return response()->json([
-//                 'message'=>'email is wrong',
-//             ]);
-//         }
-//         if(!Hash::isHashed($user->password, $request->password)){
-//             return response()->json([
-//                 'message'=>'password is wrong',
-//             ]);
-//         }
-//         $token= $user->createToken('MyAppToken')->accessToken;
-//         return response()->json([
-//             'token'=>$token,'user'=>$user
-//         ]);}
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'password is wrong',
+            ]);
+        }
 
+        $token = $user->createToken('MyAppToken')->accessToken;
 
-public function Login(Request $request){
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
-
-    $user = User::where('email', $request->email)->first();
-
-    if (!$user) {
         return response()->json([
-            'message' => 'email is wrong',
+            'token' => $token,
+            'user' => $user
         ]);
     }
-
-    if (!Hash::check($request->password, $user->password)) {
-        return response()->json([
-            'message' => 'password is wrong',
-        ]);
-    }
-
-    $token = $user->createToken('MyAppToken')->accessToken;
-
-    return response()->json([
-        'token' => $token,
-        'user' => $user
-    ]);
 }
-
- }
