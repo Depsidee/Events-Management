@@ -59,7 +59,7 @@ $this->UserService=$UserService;
                 'email' => $request->email,
                 'password' => Hash::make('password'),
                 'role_name' => $role_name,
-                'profile_image' => $fileName,
+                'profile_image' => $path.$fileName
             ]);
             $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
             $success['user_name'] = $user->user_name;
@@ -135,7 +135,7 @@ $this->UserService=$UserService;
                     'email' => $request->email,
                     'password' => Hash::make('password'),
                     'role_name' => $role_name,
-                    'profile_image' => $fileName
+                    'profile_image' => $path.$fileName
                 ]);
 
 
@@ -203,9 +203,9 @@ $this->UserService=$UserService;
                         'price_per_hour' => $request->price_per_hour,
                         'space' => $request->space,
                         'work_time_id' => $Work_time->id,
-                        'license_image' =>$license_image,
-                        'external_image' => $external_image,
-                        'panorama_image' => $panorama_image,
+                        'license_image' => $path.$license_image,
+                        'external_image' =>  $path.$external_image,
+                        'panorama_image' =>  $path.$panorama_image,
 
                     ]
                 );
