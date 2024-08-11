@@ -33,8 +33,16 @@ class HallTypeController extends Controller
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
+        $type = HallType::where('id','=',$id)->first();
+        if($type==null)
+        {
+            return response([
+                'message'=>'There is no type with such id.'
+            ]);
+        }
+
         $halls = Hall::
-            with('user','locationCoordinates','workTime','hallCapacity','rating','hallType')
+            with('user','locationCoordinates','workTime','hallCapacity','rating')
             ->where('hall_type_id','=',$id)
             ->where('has_recorded','=','1')
             ->get();

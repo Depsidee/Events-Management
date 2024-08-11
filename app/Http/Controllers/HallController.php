@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\hallResource as hallResource;
-use App\Models\Favorite;
 use Illuminate\Support\Facades\Auth ;
 use App\Models\Hall;
 use App\Models\User;
@@ -17,37 +15,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HallController extends BaseController
-
 {
-    //////halls with favorite
-    public function index_withfavorite(){
-        if(Auth::user()->role_name=='client'){
-           $halls = Hall::where('has_recorded','=','1')
-        ->get();
-
-
-        //$medicines = Medicine::paginate(); // show every 15 item
-        if(!Isset($halls) ){
-            return $this->sendError('There is no medicine yet');
-        }
-        else{
-        }
-  //      $favorites = Favorite::all();
-
-            return $this->sendResponse(hallResource::collection($halls) , 'all medicines retrived successfully');}
-else {
-    return $this->sendError('you don\'t have permission' ,403);
-}
-    }
-
-
-
-    //////////
     public function index()
     {
         if(Auth::user()->role_name=='admin_hall')
         {
-            return $this->sendError('you don\'t have permission' ,403);
+            return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
         $halls = Hall::
