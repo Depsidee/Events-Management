@@ -77,8 +77,9 @@ Route::prefix('admin_hall')->group(function () {
         ///wallet
         Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
 
-        //hall
+        //hallViews
         Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
+        ////hall
         Route::post('update', [App\Http\Controllers\HallController::class, 'update']);
         //reservation
         Route::get('hallReservations', [App\Http\Controllers\ReservationController::class, 'hallReservations']);
@@ -136,5 +137,7 @@ Route::prefix('client')->group(function () {
         Route::post('favorite/add', [App\Http\Controllers\FavoriteController::class, 'changeStatus']);
         Route::get('favorite', [App\Http\Controllers\FavoriteController::class, 'index']);
         Route::get('index_withfavorite', [App\Http\Controllers\HallController::class, 'index_withfavorite']);
+        //hallViews
+        Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
     });
 });

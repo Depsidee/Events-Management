@@ -11,7 +11,7 @@ class FoodController extends Controller
 {
     public function index()
     {
-        $foods = Food::with('category')->get();
+        $foods = Food::with('foodCategory')->get();
         return response()->json($foods);
     }
 
@@ -37,17 +37,18 @@ class FoodController extends Controller
         $path = $path . $fileName;
 
         $food = Food::create([
-            'food_category_id' => $request->decoration_category_id,
+            'food_category_id' => $request->food_category_id,
             'image' => $path,
             'price' => $request->price
         ]);
+
         return response()->json($food, 201);
     }
 
     public function show($id)
     {
 
-        $food = Food::with('category')->findOrFail($id);
+        $food = Food::with('foodCategory')->findOrFail($id);
         return response()->json($food);
     }
 
