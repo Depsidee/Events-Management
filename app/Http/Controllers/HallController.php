@@ -16,6 +16,15 @@ use Illuminate\Support\Facades\DB;
 
 class HallController extends BaseController
 {
+    public function show_myHall()
+    {
+
+        $hall = Hall::where('user_id' , Auth::user()->id)->first();//
+        if (!isset($hall)) {
+            return $this->sendError('There is no hall');
+        } else
+            return $this->sendResponse($hall, 'Successfully');
+    }
     public function index()
     {
         if(Auth::user()->role_name=='admin_hall')

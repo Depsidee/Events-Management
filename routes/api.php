@@ -27,7 +27,7 @@ Route::prefix('super_admin')->group(function () {
         Route::get('index', [App\Http\Controllers\userController::class, 'index']);
         Route::get('showPersonalInfo/{id}', [App\Http\Controllers\userController::class, 'showPersonalInfo']);
         Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout']);
-        Route::post('update/Admin/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo_Admin']);
+        Route::post('update/Admin/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo']);
         //wallet
         Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         //song
@@ -35,7 +35,7 @@ Route::prefix('super_admin')->group(function () {
         Route::post('update/song/{id}', [App\Http\Controllers\songController::class, 'updateSong']);
         Route::get('show/song', [App\Http\Controllers\songController::class, 'index']);
         Route::get('delete/song/{id}', [App\Http\Controllers\songController::class, 'deleteSong']);
-          
+
         //food
         Route::apiResource('foods', \App\Http\Controllers\FoodController::class);
         Route::apiResource('food_categories', \App\Http\Controllers\FoodCategoryController::class);
@@ -50,11 +50,11 @@ Route::prefix('super_admin')->group(function () {
          Route::get('hallDetails/{id}', [App\Http\Controllers\HallController::class, 'hallDetails']);
          Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
          Route::get('rejectHall/{id}', [App\Http\Controllers\HallController::class, 'rejectHall']);
- 
+
          //Hall Type
          Route::get('indexTypes', [App\Http\Controllers\HallTypeController::class, 'index']);
          Route::get('typeHalls/{id}', [App\Http\Controllers\HallTypeController::class, 'hallsOfType']);
- 
+
          //Reservation
          Route::get('indexReservations', [App\Http\Controllers\ReservationController::class, 'index']);
          Route::post('acceptReservation/{id}', [App\Http\Controllers\ReservationController::class, 'acceptReservation']);
@@ -62,16 +62,16 @@ Route::prefix('super_admin')->group(function () {
          Route::get('pendingReservations', [App\Http\Controllers\ReservationController::class, 'pendingReservations']);
          Route::get('allPreviousReservations', [App\Http\Controllers\ReservationController::class, 'allPreviousReservations']);
          Route::get('allUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'allUpcomingReservations']);
- 
+
          //Report
          Route::get('indexReports', [App\Http\Controllers\ReportController::class, 'indexReports']);
- 
+
          //Home Reservation
          Route::get('indexHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'index']);
          Route::get('pendingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'pendingHomeReservations']);
          Route::get('allPreviousHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'allPreviousHomeReservations']);
          Route::get('allUpcomingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'allUpcomingHomeReservations']);
- 
+
          //Reservation Type
          Route::get('indexReservationTypes', [App\Http\Controllers\ReservationTypeController::class, 'index']);
          Route::get('reservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'reservationsOfType']);
@@ -96,9 +96,9 @@ Route::prefix('admin_hall')->group(function () {
 
         //hallViews
         Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
-        
+
         //Hall
-        Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
+        Route::get('show_myHall', [App\Http\Controllers\HallController::class, 'show_myHall']);
         Route::post('update', [App\Http\Controllers\HallController::class, 'update']);
 
         //Reservation
@@ -154,11 +154,11 @@ Route::prefix('client')->group(function () {
          Route::get('hallDetails/{id}', [App\Http\Controllers\HallController::class, 'hallDetails']);
          Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
          Route::post('search', [App\Http\Controllers\HallController::class, 'hallsAccordingQuestions']);
- 
+
          //Hall Type
          Route::get('indexTypes', [App\Http\Controllers\HallTypeController::class, 'index']);
          Route::get('typeHalls/{id}', [App\Http\Controllers\HallTypeController::class, 'hallsOfType']);
- 
+
          //Reservation
          Route::post('addReservation', [App\Http\Controllers\ReservationController::class, 'addReservation']);
          Route::put('updateReservation', [App\Http\Controllers\ReservationController::class, 'updateReservation']);
@@ -167,10 +167,10 @@ Route::prefix('client')->group(function () {
          Route::get('reservationDates/{id}', [App\Http\Controllers\ReservationController::class, 'reservationDates']);
          Route::get('userPreviousReservations', [App\Http\Controllers\ReservationController::class, 'userPreviousReservations']);
          Route::get('userUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'userUpcomingReservations']);
- 
+
          //Report
          Route::post('addReport', [App\Http\Controllers\ReportController::class, 'addReport']);
- 
+
          //Home Reservation
          Route::get('userHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userHomeReservations']);
          Route::post('addHomeReservation', [App\Http\Controllers\HomeReservationController::class, 'addHomeReservation']);
@@ -178,7 +178,7 @@ Route::prefix('client')->group(function () {
          Route::delete('deleteHomeReservation/{id}', [App\Http\Controllers\HomeReservationController::class, 'deleteHomeReservation']);
          Route::get('userPreviousHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userPreviousHomeReservations']);
          Route::get('userUpcomingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userUpcomingHomeReservations']);
- 
+
          //Reservation Type
          Route::get('indexReservationTypes', [App\Http\Controllers\ReservationTypeController::class, 'index']);
          Route::get('userReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'userReservationsOfType']);

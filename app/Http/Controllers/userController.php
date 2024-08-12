@@ -41,53 +41,76 @@ class userController extends BaseController
 
 
 
-    ////////
+       ////////
     ///////update_user
    ///////
-    public function updatePesonalInfo(Request $request,  $id)
-    {
-        $user = User::find($id);
-        if(Auth::user()->id != $user->id || Auth::user()->role_name=='super_admin'){
-            return $this->sendError('don\'t have permission to fetch this data' ,'' ,403);
-        }
-        else{
-            $validator = Validator::make($request->all(),[
-                'user_name' => ['required', 'unique:users', 'max:10', 'min:4', 'string', 'regex:/^[a-zA-Z]+$/'],
-                'phone_number' => ['required', 'digits:10'],
-                'email' => ['required', new GmailValidation],
-                'password' => ['required', 'min:9', 'max:15'],
-                'profile_image' => ['image'],
-        ]);
-        if($validator->fails()){
-            return $this->sendError('validate your data,' , $validator->errors());
-        }
-        if($request->has('profile_image'))
-        {
-            $file= $request->file('profile_image');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time().'.profile_image.'.$extension;
-            $path = 'users/update/';
-            $file->move($path,$fileName);
+   public function updatePesonalInfo(Request $request, $id)
+   {
+       $user = User::find($id);
 
-        }
-        // if ($request->has('profile_image')) {
-        //     $profile_image = $request->profile_image;
-        //     $newPhoto = time().$profile_image->getClientOriginalName();
-        //     $profile_image->move('update/users',$newPhoto);
-        //     $user->profile_image ='update/users/'.$newPhoto ;
-        // }
+       // Validation rules array
+       $rules = [];
 
+       if ($request->has('user_name') && $request->user_name != $user->user_name) {
+           $rules['user_name'] = ['unique:users', 'max:10', 'min:4', 'string', 'regex:/^[a-zA-Z]+$/'];
+       }
 
-        $user->user_name = $request->user_name;
-        $user->phone_number = $request->phone_number;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->profile_image = $fileName;
-     $user->save();
+       if ($request->has('phone_number') && $request->phone_number != $user->phone_number) {
+           $rules['phone_number'] = ['digits:10'];
+       }
 
-        return $this->sendResponse($user ,  'updated data done successfully');}
+       if ($request->has('email') && $request->email != $user->email) {
+           $rules['email'] = [new GmailValidation];
+       }
 
-    }
+       if ($request->has('password')) {
+           $rules['password'] = ['min:8', 'max:15'];
+       }
+
+       if ($request->has('profile_image')) {
+           $rules['profile_image'] = ['image'];
+       }
+
+       // Validate request
+       $validator = Validator::make($request->all(), $rules);
+
+       if ($validator->fails()) {
+           return $this->sendError('Validate your data', $validator->errors());
+       }
+
+       // Update the profile image if provided
+       $fileName = null;
+       $path = null;
+       if ($request->has('profile_image')) {
+           $file = $request->file('profile_image');
+           $extension = $file->getClientOriginalExtension();
+           $fileName = time() . '.profile_image.' . $extension;
+           $path = 'users/update/';
+           $file->move($path, $fileName);
+           $user->profile_image = $path . $fileName;
+       }
+
+       // Update the user info only if the input is provided and different
+       if ($request->has('user_name') && $request->user_name != $user->user_name) {
+           $user->user_name = $request->user_name;
+       }
+
+       if ($request->has('phone_number') && $request->phone_number != $user->phone_number) {
+           $user->phone_number = $request->phone_number;
+       }
+
+       if ($request->has('email') && $request->email != $user->email) {
+           $user->email = $request->email;
+       }
+
+       if ($request->has('password')) {
+           $user->password = $request->password;
+       }
+
+       $user->save();
+
+       return $this->sendResponse($user, 'Updated data successfully');
+   }
 ///////
 ///update_admin
 ////////
@@ -102,8 +125,23 @@ class userController extends BaseController
         if($validator->fails()){
             return $this->sendError('validate your data,' , $validator->errors());
         }
-        $user->email = $request->email;
-        $user->password = $request->password;
+
+
+        if ($request->has('user_name') && $request->user_name != $user->user_name) {
+            $user->user_name = $request->user_name;
+        }
+
+        if ($request->has('phone_number') && $request->phone_number != $user->phone_number) {
+            $user->phone_number = $request->phone_number;
+        }
+
+        if ($request->has('email') && $request->email != $user->email) {
+            $user->email = $request->email;
+        }
+
+        if ($request->has('password')) {
+            $user->password = $request->password;
+        }
 
             $user->save();
             return $this->sendResponse(new UserResource($user) ,  'updated data done successfully');
