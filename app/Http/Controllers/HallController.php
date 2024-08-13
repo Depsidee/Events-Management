@@ -18,13 +18,44 @@ class HallController extends BaseController
 {
     public function show_myHall()
     {
+        $hall = Hall::where('user_id', Auth::user()->id)
+                    ->with([
+                        'locationCoordinates',
+                        'workTime',
+                        'hallCapacity',
+                        'rating',
+                        'hallType'
+                    ])
+                    ->first();
 
-        $hall = Hall::where('user_id' , Auth::user()->id)->first();//
         if (!isset($hall)) {
             return $this->sendError('There is no hall');
-        } else
-            return $this->sendResponse($hall, 'Successfully');
+        } else {
+            // Prepare the hall data
+            $hallData = $hall->toArray();
+
+            // Replace ID fields with related data
+            $hallData['location_coordinates'] = $hall->locationCoordinates;
+            unset($hallData['location_coordinates_id']);
+
+            $hallData['work_time'] = $hall->workTime;
+            unset($hallData['work_time_id']);
+
+            $hallData['hall_capacity'] = $hall->hallCapacity;
+            unset($hallData['hall_capacity_id']);
+
+            $hallData['rating'] = $hall->rating;
+            unset($hallData['rating_id']);
+
+            $hallData['hall_type'] = $hall->hallType;
+            unset($hallData['hall_type_id']);
+
+            // Return the modified response
+            return $this->sendResponse($hallData, 'Successfully');
+        }
     }
+
+
     public function index()
     {
         if(Auth::user()->role_name=='admin_hall')

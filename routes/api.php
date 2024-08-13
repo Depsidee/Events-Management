@@ -93,14 +93,12 @@ Route::prefix('admin_hall')->group(function () {
         Route::post('update/user/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo']);
         ///wallet
         Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
-
         //hallViews
         Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
 
         //Hall
         Route::get('show_myHall', [App\Http\Controllers\HallController::class, 'show_myHall']);
         Route::post('update', [App\Http\Controllers\HallController::class, 'update']);
-
         //Reservation
         Route::get('hallReservations', [App\Http\Controllers\ReservationController::class, 'hallReservations']);
         Route::get('hallPreviousReservations', [App\Http\Controllers\ReservationController::class, 'hallPreviousReservations']);
