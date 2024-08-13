@@ -17,4 +17,9 @@ class ReservationType extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function HomeReservations()
+    {
+        return $this->hasMany(HomeReservation::class);
+    }
 }

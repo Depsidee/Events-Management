@@ -11,11 +11,12 @@ class HomeReservation extends Model
 
     protected $fillable = [
         'user_id',
+        'reservation_type_id',
         'decoration_id',
         'payment_id',
         'photography_id',
         'location_coordinates_id',
-        'has_recording',
+        'has_recorded',
         'date',
         'period',
         'start_time',
@@ -25,6 +26,11 @@ class HomeReservation extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reservationType()
+    {
+        return $this->belongsTo(ReservationType::class);
     }
 
     public function decoration()
@@ -47,7 +53,7 @@ class HomeReservation extends Model
         return $this->belongsTo(locationCoordinates::class);
     }
 
-    public function foodHomes()
+    public function foodHome()
     {
         return $this->hasMany(FoodHome::class);
     }

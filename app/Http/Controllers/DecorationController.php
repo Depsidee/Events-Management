@@ -12,7 +12,7 @@ class DecorationController extends Controller
     public function index()
     {
 
-        $decorations = Decoration::with('category')->get();
+        $decorations = Decoration::with('decorationCategory')->get();
         return response()->json($decorations);
     }
 
@@ -50,7 +50,7 @@ class DecorationController extends Controller
     public function show($id)
     {
 
-        $decoration = Decoration::with('category')->findOrFail($id);
+        $decoration = Decoration::with('decorationCategory')->findOrFail($id);
         return response()->json($decoration);
     }
 

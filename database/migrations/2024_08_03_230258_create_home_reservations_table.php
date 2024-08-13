@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id') ->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('reservation_type_id');
+            $table->foreign('reservation_type_id') ->references('id')->on('reservation_types')->onDelete('cascade');
             $table->unsignedBigInteger('decoration_id');
             $table->foreign('decoration_id') ->references('id')->on('decorations')->onDelete('cascade');
             $table->unsignedBigInteger('payment_id');
@@ -23,7 +25,7 @@ return new class extends Migration
             $table->foreign('photography_id') ->references('id')->on('photographies')->onDelete('cascade');
             $table->unsignedBigInteger('location_coordinates_id');
             $table->foreign('location_coordinates_id') ->references('id')->on('location_coordinates')->onDelete('cascade');
-            $table->boolean('has_recording')->default(false);
+            $table->boolean('has_recorded')->default(false);
             $table->date('date');
             $table->integer('period');
             $table->time('start_time');
