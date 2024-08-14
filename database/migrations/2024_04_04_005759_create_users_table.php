@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('password');
             $table->string('role_name') ->references('name')->on('roles')->onDelete('cascade');
             $table->string('profile_image')->nullable();
+            $table->string('is_block')->default(false);
             $table->timestamp('email_verified_at')->nullable();
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

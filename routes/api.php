@@ -28,6 +28,10 @@ Route::prefix('super_admin')->group(function () {
         Route::get('showPersonalInfo/{id}', [App\Http\Controllers\userController::class, 'showPersonalInfo']);
         Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout']);
         Route::post('update/Admin/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo']);
+        // show all Block
+        Route::get('show_all_Block', [App\Http\Controllers\userController::class, 'index_all_Block']);
+
+
         //wallet
         Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         //song
@@ -91,6 +95,8 @@ Route::prefix('admin_hall')->group(function () {
 
         Route::get('showPersonalInfo/{id}', [App\Http\Controllers\userController::class, 'showPersonalInfo']);
         Route::post('update/user/{id}', [App\Http\Controllers\userController::class, 'updatePesonalInfo']);
+        ///is_block
+        Route::get('index_is_Block', [App\Http\Controllers\userController::class, 'index_is_Block']);
         ///wallet
         Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         //hallViews

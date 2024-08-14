@@ -32,7 +32,9 @@ return new class extends Migration
             $table->string('license_image')->nullable();
             $table->string('panorama_image')->nullable();
             $table->string('external_image')->nullable();
+            $table->integer('Reports_counter')->default(0);
            $table->boolean('is_verified')->default(false);
+           $table->softDeletes();
             $table->timestamps();
         });
     }
