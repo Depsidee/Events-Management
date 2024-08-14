@@ -9,12 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class HallViewController extends Controller
 {
+//////////////////
+//index
+/////////
     public function index()
     {
         $views = View::with(['user', 'hall'])->get();
         return response()->json($views);
     }
-
+///////////////
+//store
+//////////////
     public function store(Request $request)
     {
 
@@ -32,13 +37,22 @@ class HallViewController extends Controller
         $view = View::create($validator->validated());
         return response()->json($view, 201);
     }
-
+///////////////
+//show
+/////
     public function show($id)
     {
-        $view = View::with(['user', 'hall'])->findOrFail($id);
+
+        $view = View::find($id);
+if($view->user_id!=Auth::user()->id){
+    return response(['don\'t have permission to fetch this data'],403);
+}
+
         return response()->json($view);
     }
-
+////////////////
+///update view
+///////////
     public function update(Request $request, $id)
     {
 
@@ -57,7 +71,9 @@ class HallViewController extends Controller
         $view->update($validator->validated());
         return response()->json($view);
     }
-
+////////////////////
+//delete view
+/////////////////
     public function destroy($id)
     {
 
