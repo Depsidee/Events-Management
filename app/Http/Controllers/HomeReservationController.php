@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\Photography;
 use App\Models\Reservation;
 use App\Models\ReservationType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth ;
 
@@ -305,14 +306,24 @@ class HomeReservationController extends BaseController
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
-        $now = date("Y-m-d");
-        $homeReservations = HomeReservation::
+        $date = date("Y-m-d");
+        $time = date("H:i:s");
+        $time = Carbon::parse($time)->addHours(3);
+        $homeReservations = array();
+        $homeReservations[] = HomeReservation::
         query()->orderBy('date','desc')
         ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
         ->where('has_recorded','=','1')
-        ->where('date','<',$now)
+        ->where('date','=',$date)
+        ->where('start_time','<',$time)
         ->get();
-        if($homeReservations->count()<1)
+        $homeReservations[] = HomeReservation::
+        query()->orderBy('date','desc')
+        ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
+        ->where('has_recorded','=','1')
+        ->where('date','<',$date)
+        ->get();
+        if(empty($homeReservations))
         {
             return response([
                 'message'=>'There are no home reservations yet'
@@ -329,14 +340,24 @@ class HomeReservationController extends BaseController
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
-        $now = date("Y-m-d");
-        $homeReservations = HomeReservation::
+        $date = date("Y-m-d");
+        $time = date("H:i:s");
+        $time = Carbon::parse($time)->addHours(3);
+        $homeReservations = array();
+        $homeReservations[] = HomeReservation::
         query()->orderBy('date')
         ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
         ->where('has_recorded','=','1')
-        ->where('date','>=',$now)
+        ->where('date','=',$date)
+        ->where('start_time','>=',$time)
         ->get();
-        if($homeReservations->count()<1)
+        $homeReservations[] = HomeReservation::
+        query()->orderBy('date')
+        ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
+        ->where('has_recorded','=','1')
+        ->where('date','>',$date)
+        ->get();
+        if(empty($homeReservations))
         {
             return response([
                 'message'=>'There are no home reservations yet'
@@ -354,15 +375,26 @@ class HomeReservationController extends BaseController
         }
 
         $userId = auth()->user()->id;
-        $now = date("Y-m-d");
-        $homeReservations = HomeReservation::
+        $date = date("Y-m-d");
+        $time = date("H:i:s");
+        $time = Carbon::parse($time)->addHours(3);
+        $homeReservations = array();
+        $homeReservations[] = HomeReservation::
         query()->orderBy('date','desc')
         ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
         ->where('user_id','=',$userId)
         ->where('has_recorded','=','1')
-        ->where('date','<',$now)
+        ->where('date','=',$date)
+        ->where('start_time','<',$time)
         ->get();
-        if($homeReservations->count()<1)
+        $homeReservations[] = HomeReservation::
+        query()->orderBy('date','desc')
+        ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
+        ->where('user_id','=',$userId)
+        ->where('has_recorded','=','1')
+        ->where('date','<',$date)
+        ->get();
+        if(empty($homeReservations))
         {
             return response([
                 'message'=>'There are no home reservations yet'
@@ -380,15 +412,26 @@ class HomeReservationController extends BaseController
         }
 
         $userId = auth()->user()->id;
-        $now = date("Y-m-d");
-        $homeReservations = HomeReservation::
+        $date = date("Y-m-d");
+        $time = date("H:i:s");
+        $time = Carbon::parse($time)->addHours(3);
+        $homeReservations = array();
+        $homeReservations[] = HomeReservation::
         query()->orderBy('date')
         ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
         ->where('user_id','=',$userId)
         ->where('has_recorded','=','1')
-        ->where('date','>=',$now)
+        ->where('date','=',$date)
+        ->where('start_time','>=',$time)
         ->get();
-        if($homeReservations->count()<1)
+        $homeReservations[] = HomeReservation::
+        query()->orderBy('date')
+        ->with('user','reservationType','locationCoordinates','decoration','payment','photography','foodHome')
+        ->where('user_id','=',$userId)
+        ->where('has_recorded','=','1')
+        ->where('date','>',$date)
+        ->get();
+        if(empty($homeReservations))
         {
             return response([
                 'message'=>'There are no home reservations yet'
