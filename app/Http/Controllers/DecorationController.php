@@ -46,35 +46,35 @@ class DecorationController extends Controller
 
         return response()->json($decoration, 201);
     }
-
+////////////
     public function show($id)
     {
 
         $decoration = Decoration::with('decorationCategory')->findOrFail($id);
         return response()->json($decoration);
     }
+///////////////////
+public function update(Request $request, $id)
+{
 
-    public function update(Request $request, $id)
-    {
 
+    $validator = Validator::make($request->all(), [
+        'decoration_category_id' => 'required|exists:decoration_categories,id',
+        'price' => 'required|numeric|min:0'
+    ]);
 
-        $validator = Validator::make($request->all(), [
-            'decoration_category_id' => 'required|exists:decoration_categories,id',
-            'price' => 'required|numeric|min:0'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $decoration = Decoration::findOrFail($id);
-        $decoration->update([
-            'decoration_category_id' => $request->decoration_category_id,
-            'price' => $request->price
-            ]
-        );
-        return response()->json($decoration);
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
     }
+
+    $decoration = Decoration::findOrFail($id);
+    $decoration->update([
+        'decoration_category_id' => $request->decoration_category_id,
+        'price' => $request->price
+        ]
+    );
+    return response()->json($decoration);
+}///////////////////
 
     public function destroy($id)
     {

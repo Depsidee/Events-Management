@@ -35,7 +35,7 @@ class HallViewController extends Controller
 
     public function show($id)
     {
-        $view = View::with(['user', 'hall'])->findOrFail($id);
+        $view = View::with(['user', 'hall'])->where('user_id',Auth::user()->id)->findOrFail($id);
         return response()->json($view);
     }
 

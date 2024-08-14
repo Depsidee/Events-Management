@@ -69,6 +69,8 @@ Route::prefix('super_admin')->group(function () {
 
          //Report
          Route::get('indexReports', [App\Http\Controllers\ReportController::class, 'indexReports']);
+  //hallViews
+  Route::get('show_all_views', [App\Http\Controllers\HallViewController::class, 'index']);
 
          //Home Reservation
          Route::get('indexHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'index']);
@@ -100,7 +102,7 @@ Route::prefix('admin_hall')->group(function () {
         ///wallet
         Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         //hallViews
-        Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
+        Route::get('show_all_views', [App\Http\Controllers\HallViewController::class, 'index']);
 
         //Hall
         Route::get('show_myHall', [App\Http\Controllers\HallController::class, 'show_myHall']);
@@ -145,7 +147,12 @@ Route::prefix('client')->group(function () {
         Route::get('favorite', [App\Http\Controllers\FavoriteController::class, 'index']);
         Route::get('index_withfavorite', [App\Http\Controllers\HallController::class, 'index_withfavorite']);
         //hallViews
-        Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
+        Route::post('create_views', [App\Http\Controllers\HallViewController::class, 'store']);
+        Route::get('showViews/{id}', [App\Http\Controllers\HallViewController::class, 'show']);
+        Route::post('updateViews/{id}', [App\Http\Controllers\HallViewController::class, 'update']);
+        Route::get('deleteViews/{id}', [App\Http\Controllers\HallViewController::class, 'destroy']);
+        Route::get('show_all_views', [App\Http\Controllers\HallViewController::class, 'index']);
+
 
          //Hall
          Route::get('index_hall', [App\Http\Controllers\HallController::class, 'index']);
