@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\LocationCoordinates;
 use App\Models\Hall;
 use App\Models\HallCapacity;
+use App\Models\Wallet;
 use App\Models\WorkTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -41,20 +42,14 @@ class AuthController extends BaseController
             if ($validator->fails()) {
                 return ['Validate your data', $validator->errors()];
             }
-
-
-
             $fileName = null;
             $path = null;
-
 
             $file = $request->file('profile_image');
             $extension = $file->getClientOriginalExtension();
             $fileName = time() . '.profile_image.' . $extension;
             $path = 'users/storagee/';
             $file->move($path, $fileName);
-
-
             $role_name = 'client';
             $user = User::query()->create([
                 'user_name' => $request->user_name,
@@ -71,9 +66,12 @@ class AuthController extends BaseController
             $success['email'] = $user->email;
             $success['profile_image'] = $user->profile_image;
             $success['role_name'] = $user->role_name;
-
-            $message = 'registration done successfully';
-            return [$success, $message];
+            Wallet::create([
+                'user_id' =>$user->id
+            ]);
+            $wallet=Wallet::where('user_id',$user->id)->first();
+            $message = 'sigh up and creation of your wallet was completed successfully';
+            return [$success, $wallet, $message];
         }
     }
 

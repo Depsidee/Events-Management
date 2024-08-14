@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('user_name')->unique();
             $table->string('email')->unique();
-            $table->integer('phone_number')->unique();
+            $table->string('phone_number', 15)->unique();
             $table->string('password');
-            $table->string('role_name') ->references('name')->on('roles')->onDelete('cascade');
+            $table->string('role_name')->references('name')->on('roles')->onDelete('cascade');
             $table->string('profile_image')->nullable();
+            $table->string('is_block')->default(false);
             $table->timestamp('email_verified_at')->nullable();
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Hall extends Model
 {
     use HasFactory;
-
+    use SoftDeletes;
     protected $fillable = [
         'user_id',
         'location_coordinates_id',
@@ -23,6 +24,7 @@ class Hall extends Model
         'license_image',
         'panorama_image',
         'external_image',
+        'Reports_counter',
         'is_verified'
     ];
 

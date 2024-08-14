@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id') ->references('id')->on('users')->onDelete('cascade');
-            $table->decimal('balance',10,2);
+            $table->decimal('balance',10,2)->default(0);
             $table->timestamps();
         });
     }

@@ -12,7 +12,8 @@ class Report extends Model
     protected $fillable = [
         'user_id',
         'hall_id',
-        'body'
+        'body',
+        'Reports_counter'
     ];
 
     public function user()

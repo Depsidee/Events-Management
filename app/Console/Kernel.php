@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('reservations:delete-unpaid')->everyMinute();
+        $schedule->command('block:reported-halls')->everyMinute();
     }
 
 
