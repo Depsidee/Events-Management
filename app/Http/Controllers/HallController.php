@@ -120,7 +120,7 @@ class HallController extends BaseController
                 'message'=>'This hall is already accepted'
             ]);
         }
-        $hall['has_recorded']=1;
+        $hall['Has_recorded']=1;
         $hall->save();
         return response([
             'message'=>'This hall has been accepted successfully'

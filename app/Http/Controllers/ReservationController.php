@@ -408,24 +408,14 @@ class ReservationController extends BaseController
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
-        $date = date("Y-m-d");
-        $time = date('H:i:s');
-        $time = Carbon::parse($time)->addHours(3);
-        $reservations = array();
-        $reservations[] = Reservation::
+        $now = date("Y-m-d");
+        $reservations = Reservation::
         query()->orderBy('date','desc')
         ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
         ->where('has_recorded','=','1')
-        ->where('date','=',$date)
-        ->where('start_time','<',$time)
+        ->where('date','<',$now)
         ->get();
-        $reservations[] = Reservation::
-        query()->orderBy('date','desc')
-        ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
-        ->where('has_recorded','=','1')
-        ->where('date','<',$date)
-        ->get();
-        if(empty($reservations))
+        if($reservations->count()<1)
         {
             return response([
                 'message'=>'There are no reservations yet'
@@ -442,24 +432,14 @@ class ReservationController extends BaseController
             return $this->sendError('you don\'t have permission' ,'' ,403);
         }
 
-        $date = date("Y-m-d");
-        $time = date("H:i:s");
-        $time = Carbon::parse($time)->addHours(3);
-        $reservations = array();
-        $reservations[] = Reservation::
+        $now = date("Y-m-d");
+        $reservations = Reservation::
         query()->orderBy('date')
         ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
         ->where('has_recorded','=','1')
-        ->where('date','=',$date)
-        ->where('start_time','>=',$time)
+        ->where('date','>=',$now)
         ->get();
-        $reservations[] = Reservation::
-        query()->orderBy('date')
-        ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
-        ->where('has_recorded','=','1')
-        ->where('date','>',$date)
-        ->get();
-        if(empty($reservations))
+        if($reservations->count()<1)
         {
             return response([
                 'message'=>'There are no reservations yet'
@@ -478,26 +458,15 @@ class ReservationController extends BaseController
 
         $userId = auth()->user()->id;
         $hall = Hall::where('user_id','=',$userId)->first();
-        $date = date("Y-m-d");
-        $time = date("H:i:s");
-        $time = Carbon::parse($time)->addHours(3);
-        $reservations = array();
-        $reservations[] = Reservation::
+        $now = date("Y-m-d");
+        $reservations = Reservation::
         query()->orderBy('date','desc')
         ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
         ->where('hall_id','=',$hall['id'])
         ->where('has_recorded','=','1')
-        ->where('date','=',$date)
-        ->where('start_time','<',$time)
+        ->where('date','<',$now)
         ->get();
-        $reservations[] = Reservation::
-        query()->orderBy('date','desc')
-        ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
-        ->where('hall_id','=',$hall['id'])
-        ->where('has_recorded','=','1')
-        ->where('date','<',$date)
-        ->get();
-        if(empty($reservations))
+        if($reservations->count()<1)
         {
             return response([
                 'message'=>'There are no reservations yet'
@@ -516,26 +485,15 @@ class ReservationController extends BaseController
 
         $userId = auth()->user()->id;
         $hall = Hall::where('user_id','=',$userId)->first();
-        $date = date("Y-m-d");
-        $time = date("H:i:s");
-        $time = Carbon::parse($time)->addHours(3);
-        $reservations = array();
-        $reservations[] = Reservation::
+        $now = date("Y-m-d");
+        $reservations = Reservation::
         query()->orderBy('date')
         ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
         ->where('hall_id','=',$hall['id'])
         ->where('has_recorded','=','1')
-        ->where('date','=',$date)
-        ->where('start_time','>=',$time)
+        ->where('date','>=',$now)
         ->get();
-        $reservations[] = Reservation::
-        query()->orderBy('date')
-        ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
-        ->where('hall_id','=',$hall['id'])
-        ->where('has_recorded','=','1')
-        ->where('date','>',$date)
-        ->get();
-        if(empty($reservations))
+        if($reservations->count()<1)
         {
             return response([
                 'message'=>'There are no reservations yet'
@@ -556,25 +514,14 @@ class ReservationController extends BaseController
 
         $userId = auth()->user()->id;
         $now = date("Y-m-d");
-        $time = date("H:i:s");
-        $time = Carbon::parse($time)->addHours(3);
-        $reservations = array();
-        $reservations[] = Reservation::
-        query()->orderBy('date','desc')
-        ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
-        ->where('user_id','=',$userId)
-        ->where('has_recorded','=','1')
-        ->where('date','=',$now)
-        ->where('start_time','<',$time)
-        ->get();
-        $reservations[] = Reservation::
+        $reservations = Reservation::
         query()->orderBy('date','desc')
         ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
         ->where('user_id','=',$userId)
         ->where('has_recorded','=','1')
         ->where('date','<',$now)
         ->get();
-        if(empty($reservations))
+        if($reservations->count()<1)
         {
             return response([
                 'message'=>'There are no reservations yet'
@@ -592,26 +539,15 @@ class ReservationController extends BaseController
         }
 
         $userId = auth()->user()->id;
-        $date = date("Y-m-d");
-        $time = date("H:i:s");
-        $time = Carbon::parse($time)->addHours(3);
-        $reservations = array();
-        $reservations[] = Reservation::
+        $now = date("Y-m-d");
+        $reservations = Reservation::
         query()->orderBy('date')
         ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
         ->where('user_id','=',$userId)
         ->where('has_recorded','=','1')
-        ->where('date','=',$date)
-        ->where('start_time','>=',$time)
+        ->where('date','>=',$now)
         ->get();
-        $reservations[] = Reservation::
-        query()->orderBy('date')
-        ->with('user','hall','decoration','payment','photography','foodRequest','songRequest')
-        ->where('user_id','=',$userId)
-        ->where('has_recorded','=','1')
-        ->where('date','>',$date)
-        ->get();
-        if(empty($reservations))
+        if($reservations->count()<1)
         {
             return response([
                 'message'=>'There are no reservations yet'
