@@ -47,41 +47,41 @@ Route::prefix('super_admin')->group(function () {
         Route::apiResource('decoration_categories', \App\Http\Controllers\DecorationCategoryController::class);
         Route::apiResource('decorations', \App\Http\Controllers\DecorationController::class);
 
-         //Hall
-         Route::get('index_hall', [App\Http\Controllers\HallController::class, 'index']);
-         Route::get('acceptHall/{id}', [App\Http\Controllers\HallController::class, 'acceptHall']);
-         Route::get('unrecordedHalls', [App\Http\Controllers\HallController::class, 'unrecordedHalls']);
-         Route::get('hallDetails/{id}', [App\Http\Controllers\HallController::class, 'hallDetails']);
-         Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
-         Route::get('rejectHall/{id}', [App\Http\Controllers\HallController::class, 'rejectHall']);
+        //Hall
+        Route::get('index_hall', [App\Http\Controllers\HallController::class, 'index']);
+        Route::get('acceptHall/{id}', [App\Http\Controllers\HallController::class, 'acceptHall']);
+        Route::get('unrecordedHalls', [App\Http\Controllers\HallController::class, 'unrecordedHalls']);
+        Route::get('hallDetails/{id}', [App\Http\Controllers\HallController::class, 'hallDetails']);
+        Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
+        Route::get('rejectHall/{id}', [App\Http\Controllers\HallController::class, 'rejectHall']);
 
-         //Hall Type
-         Route::get('indexTypes', [App\Http\Controllers\HallTypeController::class, 'index']);
-         Route::get('typeHalls/{id}', [App\Http\Controllers\HallTypeController::class, 'hallsOfType']);
+        //Hall Type
+        Route::get('indexTypes', [App\Http\Controllers\HallTypeController::class, 'index']);
+        Route::get('typeHalls/{id}', [App\Http\Controllers\HallTypeController::class, 'hallsOfType']);
 
-         //Reservation
-         Route::get('indexReservations', [App\Http\Controllers\ReservationController::class, 'index']);
-         Route::post('acceptReservation/{id}', [App\Http\Controllers\ReservationController::class, 'acceptReservation']);
-         Route::get('rejectReservation/{id}', [App\Http\Controllers\ReservationController::class, 'rejectReservation']);
-         Route::get('pendingReservations', [App\Http\Controllers\ReservationController::class, 'pendingReservations']);
-         Route::get('allPreviousReservations', [App\Http\Controllers\ReservationController::class, 'allPreviousReservations']);
-         Route::get('allUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'allUpcomingReservations']);
+        //Reservation
+        Route::get('indexReservations', [App\Http\Controllers\ReservationController::class, 'index']);
+        Route::post('acceptReservation/{id}', [App\Http\Controllers\ReservationController::class, 'acceptReservation']);
+        Route::get('rejectReservation/{id}', [App\Http\Controllers\ReservationController::class, 'rejectReservation']);
+        Route::get('pendingReservations', [App\Http\Controllers\ReservationController::class, 'pendingReservations']);
+        Route::get('allPreviousReservations', [App\Http\Controllers\ReservationController::class, 'allPreviousReservations']);
+        Route::get('allUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'allUpcomingReservations']);
 
-         //Report
-         Route::get('indexReports', [App\Http\Controllers\ReportController::class, 'indexReports']);
-  //hallViews
-  Route::get('show_all_views', [App\Http\Controllers\HallViewController::class, 'index']);
+        //Report
+        Route::get('indexReports', [App\Http\Controllers\ReportController::class, 'indexReports']);
+        //hallViews
+        Route::get('show_all_views', [App\Http\Controllers\HallViewController::class, 'index']);
 
-         //Home Reservation
-         Route::get('indexHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'index']);
-         Route::get('pendingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'pendingHomeReservations']);
-         Route::get('allPreviousHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'allPreviousHomeReservations']);
-         Route::get('allUpcomingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'allUpcomingHomeReservations']);
+        //Home Reservation
+        Route::get('indexHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'index']);
+        Route::get('pendingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'pendingHomeReservations']);
+        Route::get('allPreviousHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'allPreviousHomeReservations']);
+        Route::get('allUpcomingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'allUpcomingHomeReservations']);
 
-         //Reservation Type
-         Route::get('indexReservationTypes', [App\Http\Controllers\ReservationTypeController::class, 'index']);
-         Route::get('reservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'reservationsOfType']);
-         Route::get('homeReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'homeReservationsOfType']);
+        //Reservation Type
+        Route::get('indexReservationTypes', [App\Http\Controllers\ReservationTypeController::class, 'index']);
+        Route::get('reservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'reservationsOfType']);
+        Route::get('homeReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'homeReservationsOfType']);
     });
 });
 
@@ -154,45 +154,49 @@ Route::prefix('client')->group(function () {
         Route::get('show_all_views', [App\Http\Controllers\HallViewController::class, 'index']);
 
 
-         //Hall
-         Route::get('index_hall', [App\Http\Controllers\HallController::class, 'index']);
-         Route::post('hallFromCoordinates', [App\Http\Controllers\HallController::class, 'hallFromCoordinates']);
-         Route::get('showAccordingRating', [App\Http\Controllers\HallController::class, 'showAccordingRating']);
-         Route::get('lowestPrice', [App\Http\Controllers\HallController::class, 'lowestPrice']);
-         Route::get('highestPrice', [App\Http\Controllers\HallController::class, 'highestPrice']);
-         Route::get('smallestSpace', [App\Http\Controllers\HallController::class, 'smallestSpace']);
-         Route::get('largestSpace', [App\Http\Controllers\HallController::class, 'largestSpace']);
-         Route::get('hallDetails/{id}', [App\Http\Controllers\HallController::class, 'hallDetails']);
-         Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
-         Route::post('search', [App\Http\Controllers\HallController::class, 'hallsAccordingQuestions']);
+        //Hall
+        Route::get('index_hall', [App\Http\Controllers\HallController::class, 'index']);
+        Route::post('hallFromCoordinates', [App\Http\Controllers\HallController::class, 'hallFromCoordinates']);
+        Route::get('showAccordingRating', [App\Http\Controllers\HallController::class, 'showAccordingRating']);
+        Route::get('lowestPrice', [App\Http\Controllers\HallController::class, 'lowestPrice']);
+        Route::get('highestPrice', [App\Http\Controllers\HallController::class, 'highestPrice']);
+        Route::get('smallestSpace', [App\Http\Controllers\HallController::class, 'smallestSpace']);
+        Route::get('largestSpace', [App\Http\Controllers\HallController::class, 'largestSpace']);
+        Route::get('hallDetails/{id}', [App\Http\Controllers\HallController::class, 'hallDetails']);
+        Route::get('hallViews/{id}', [App\Http\Controllers\HallController::class, 'hallViews']);
+        Route::post('search', [App\Http\Controllers\HallController::class, 'hallsAccordingQuestions']);
 
-         //Hall Type
-         Route::get('indexTypes', [App\Http\Controllers\HallTypeController::class, 'index']);
-         Route::get('typeHalls/{id}', [App\Http\Controllers\HallTypeController::class, 'hallsOfType']);
+        //Hall Type
+        Route::get('indexTypes', [App\Http\Controllers\HallTypeController::class, 'index']);
+        Route::get('typeHalls/{id}', [App\Http\Controllers\HallTypeController::class, 'hallsOfType']);
 
-         //Reservation
-         Route::post('addReservation', [App\Http\Controllers\ReservationController::class, 'addReservation']);
-         Route::put('updateReservation', [App\Http\Controllers\ReservationController::class, 'updateReservation']);
-         Route::delete('deleteReservation/{id}', [App\Http\Controllers\ReservationController::class, 'deleteReservation']);
-         Route::get('userReservations', [App\Http\Controllers\ReservationController::class, 'userReservations']);
-         Route::get('reservationDates/{id}', [App\Http\Controllers\ReservationController::class, 'reservationDates']);
-         Route::get('userPreviousReservations', [App\Http\Controllers\ReservationController::class, 'userPreviousReservations']);
-         Route::get('userUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'userUpcomingReservations']);
+        //Reservation
+        Route::post('addReservation', [App\Http\Controllers\ReservationController::class, 'addReservation']);
+        Route::put('updateReservation', [App\Http\Controllers\ReservationController::class, 'updateReservation']);
+        Route::delete('deleteReservation/{id}', [App\Http\Controllers\ReservationController::class, 'deleteReservation']);
+        Route::get('userReservations', [App\Http\Controllers\ReservationController::class, 'userReservations']);
+        Route::get('reservationDates/{id}', [App\Http\Controllers\ReservationController::class, 'reservationDates']);
+        Route::get('userPreviousReservations', [App\Http\Controllers\ReservationController::class, 'userPreviousReservations']);
+        Route::get('userUpcomingReservations', [App\Http\Controllers\ReservationController::class, 'userUpcomingReservations']);
 
-         //Report
-         Route::post('addReport', [App\Http\Controllers\ReportController::class, 'addReport']);
+        //Report
+        Route::post('addReport', [App\Http\Controllers\ReportController::class, 'addReport']);
 
-         //Home Reservation
-         Route::get('userHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userHomeReservations']);
-         Route::post('addHomeReservation', [App\Http\Controllers\HomeReservationController::class, 'addHomeReservation']);
-         Route::put('updateHomeReservation', [App\Http\Controllers\HomeReservationController::class, 'updateHomeReservation']);
-         Route::delete('deleteHomeReservation/{id}', [App\Http\Controllers\HomeReservationController::class, 'deleteHomeReservation']);
-         Route::get('userPreviousHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userPreviousHomeReservations']);
-         Route::get('userUpcomingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userUpcomingHomeReservations']);
+        //Home Reservation
+        Route::get('userHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userHomeReservations']);
+        Route::post('addHomeReservation', [App\Http\Controllers\HomeReservationController::class, 'addHomeReservation']);
+        Route::put('updateHomeReservation', [App\Http\Controllers\HomeReservationController::class, 'updateHomeReservation']);
+        Route::delete('deleteHomeReservation/{id}', [App\Http\Controllers\HomeReservationController::class, 'deleteHomeReservation']);
+        Route::get('userPreviousHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userPreviousHomeReservations']);
+        Route::get('userUpcomingHomeReservations', [App\Http\Controllers\HomeReservationController::class, 'userUpcomingHomeReservations']);
 
-         //Reservation Type
-         Route::get('indexReservationTypes', [App\Http\Controllers\ReservationTypeController::class, 'index']);
-         Route::get('userReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'userReservationsOfType']);
-         Route::get('userHomeReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'userHomeReservationsOfType']);
+        //Reservation Type
+        Route::get('indexReservationTypes', [App\Http\Controllers\ReservationTypeController::class, 'index']);
+        Route::get('userReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'userReservationsOfType']);
+        Route::get('userHomeReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'userHomeReservationsOfType']);
+
+        //food
+        Route::apiResource('foods', \App\Http\Controllers\FoodController::class);
+        Route::apiResource('food_categories', \App\Http\Controllers\FoodCategoryController::class);
     });
 });
