@@ -121,7 +121,7 @@ class ReservationController extends BaseController
             ],404);
         }
         $hall_id = $request->get('hall_id');
-        $hall = Hall::find($hall_id)->first();
+        $hall = Hall::where('id','=',$hall_id)->first();
         if($hall==null)
         {
             return response([
