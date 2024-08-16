@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\ServiceProvider;
+use Kreait\Firebase\Factory;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -12,7 +12,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(Factory::class, function ($app) {
+            $firebaseConfig = config('firebase.credentials');
+//
+            // Load the Firebase credentials from the configuration
+             $factory = (new Factory)->withServiceAccount($firebaseConfig);
+
+
+return  $factory;
+
+        });
     }
 
     /**
