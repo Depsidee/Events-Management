@@ -38,6 +38,7 @@ class AuthController extends BaseController
                 'email' => ['required', 'unique:users', new GmailValidation],
                 'password' => ['required', 'min:9', 'max:15'],
                 'profile_image' =>  'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'Fcm_token' => 'required',
             ]);
             if ($validator->fails()) {
                 return ['Validate your data', $validator->errors()];
@@ -57,7 +58,8 @@ class AuthController extends BaseController
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role_name' => $role_name,
-                'profile_image' => $path . $fileName
+                'profile_image' => $path . $fileName,
+                'Fcm_token'=>$request->Fcm_token,
             ]);
 
             $success['token'] = $user->createToken('ProgrammingLanguageProject')->accessToken;
@@ -66,6 +68,7 @@ class AuthController extends BaseController
             $success['email'] = $user->email;
             $success['profile_image'] = $user->profile_image;
             $success['role_name'] = $user->role_name;
+            $success['Fcm_token'] = $user->Fcm_token;
             Wallet::create([
                 'user_id' =>$user->id
             ]);

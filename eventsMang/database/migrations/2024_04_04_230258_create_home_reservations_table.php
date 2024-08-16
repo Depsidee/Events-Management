@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('period');
             $table->time('start_time');
             $table->decimal('total_price',10,2);
+            $table->timestamp('delete_time')->nullable()->format('Y-m-d');
             $table->timestamps();
         });
     }

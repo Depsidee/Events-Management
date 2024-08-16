@@ -31,7 +31,7 @@ class User extends Authenticatable
         'password',
         'role_name',
         'profile_image',
-
+    'Fcm_token',
         'is_block'
     ];
 

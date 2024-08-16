@@ -10,7 +10,9 @@ use App\Models\Decoration;
 use App\Models\Photography;
 use App\Models\Reservation;
 use App\Models\Food;
+use App\Models\FoodHome;
 use App\Models\FoodRequest;
+use App\Models\HomeReservation;
 use App\Models\Song;
 use App\Models\SongRequest;
 use Carbon\Carbon;
@@ -21,6 +23,34 @@ use Illuminate\Http\Request;
 
 class ReservationController extends BaseController
 {
+    public static function send($tokens, $title, $body) // device token - title of m  - body of m
+    {
+    $SERVER_API_KEY = '955523039038-5v5ee9hikjldaoaam2pqq468lhufo6av.apps.googleusercontent.com';
+    // $token_1 ='ePC0idw-QcGKkUFPciWJbv:APA91bGZJBffjr0lF1s-nf4jR7sWUiGvgA9wJuPZXn62qnsmIac0A0kZb57zRQi7it7um6ViGQmqKbhuhwQSVXuVCylEYLkJS3E9askPP-RB1lx6OC41WlDnQvU5-5hhSJDfmbvmDodr' ;
+
+        $data = [
+        "to" => $tokens,
+        "notification" => [
+            "title" => $title,
+            "body" => $body,
+            "sound"=> "default" // required for sound on ios
+        ],
+    ];
+    $dataString = json_encode($data);
+    $headers = [
+        'Authorization: key=' . $SERVER_API_KEY,
+        'Content-Type: application/json',
+    ];
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+    $response = curl_exec($ch);
+    return $response;
+    }
     public function index()
     {
         if(!(Auth::user()->role_name=='super_admin'))
@@ -293,9 +323,9 @@ class ReservationController extends BaseController
         $closeTime = Carbon::parse($workTime['close_time']);
         if(!($endTime->between($openTime,$closeTime)))
         {
-            return response([
-                'message'=>"The reservation's time is out of the hall's work times."
-            ]);
+            // return response([
+            //     'message'=>"The reservation's time is out of the hall's work times."
+            // ]);
         }
 
         $reservation['period'] = $period+$request['hours'];
@@ -578,31 +608,75 @@ class ReservationController extends BaseController
         }
 
         $reservation = Reservation::find($id);
-        if ($reservation == null) {
+        $homeReservation = HomeReservation::find($id);
+        if ($reservation == null &&  $homeReservation ==null) {
             return response()->json(['message' => 'This Reservation is not available'], 404);
         }
+if($homeReservation ==null){
+    if ($request->has_recorded == 1) {
+    $payment1 = Payment::find($reservation->payment_id);
+    if ($payment1 == null) {
+        return response()->json(['message' => 'Payment not found'], 404);
+    }}
+    $reservation->has_recorded = $request->has_recorded;
+    $reservation->total_price = $request->amount;
+    $reservation->save();
 
-        if ($request->has_recorded == 1) {
-            $payment = Payment::find($reservation->payment_id);
-            if ($payment == null) {
-                return response()->json(['message' => 'Payment not found'], 404);
-            }
+    $payment1->amount = $request->amount;
+    $payment1->save();
+    //////////////
+    $user_id = $reservation->user_id;
 
-            $reservation->has_recorded = $request->has_recorded;
-            $reservation->total_price = $request->amount;
-            $reservation->save();
+    $user = User::find($user_id);
+   // dd($user);
+    $tokens = $user->Fcm_token;
+    $title = 'new messege';
+    $body = 'your reservation has been accepted successfully ,Please postpone payment within a week, otherwise the reservation will be automatically deleted.';
+ //   dd($tokens);
+    $notification=$this->send($tokens, $title, $body);
+    ////////////
+//   dd($notification);
+    return response()->json([
+        'message' => 'This reservation has been accepted successfully',
+        'reservation' => $reservation
+    ]);
+    return response()->json(['message' => 'Invalid request'], 400);
+}
+/////payment for homeReservation
+if($reservation == null){
+    if ($request->has_recorded == 1) {
+        $payment2 = Payment::find($homeReservation->payment_id);
+        if ($payment2 == null) {
+            return response()->json(['message' => 'Payment not found'], 404);
+        }}
+    $homeReservation->has_recorded = $request->has_recorded;
+    $homeReservation->total_price = $request->amount;
+    $homeReservation->save();
 
-            $payment->amount = $request->amount;
-            $payment->save();
+    $payment2->amount = $request->amount;
+    $payment2->save();
+    //////////////
+    $user_id = $homeReservation->user_id;
 
-            return response()->json([
-                'message' => 'This reservation has been accepted successfully',
-                'reservation' => $reservation
-            ]);
-        }
+    $user = User::find($user_id);
+  //  dd($user);
+    $tokens = $user->Fcm_token;
+    $title = 'new messege';
+    $body = 'your reservation has been accepted successfully ,Please postpone payment within a week, otherwise the reservation will be automatically deleted.';
+ //   dd($tokens);
+    $notification=$this->send($tokens, $title, $body);
+    ////////////
+//   dd($notification);
+    return response()->json([
+        'message' => 'This reservation has been accepted successfully',
+        'reservation' => $homeReservation
+    ]);
+    return response()->json(['message' => 'Invalid request'], 400);
+}
 
-        return response()->json(['message' => 'Invalid request'], 400);
-    }
+}
+
+
 
     ////////////
     //reject Reservation
@@ -616,24 +690,41 @@ class ReservationController extends BaseController
 
 
         $reservation = Reservation::find($id);
-        if ($reservation == null) {
+        $homeReservation = HomeReservation::find($id);
+        if ($reservation == null && $homeReservation ==null) {
             return response()->json(['message' => 'This Reservation is not available'], 404);
         }
+        if($homeReservation ==null){
+            if ($reservation['has_recorded']) {
+                return response([
+                    'message' => 'This reservation is already accepted'
+                ]);
+            }
 
-        if ($reservation['has_recorded']) {
+            FoodRequest::where('reservation_id', '=', $id)->delete();
+            SongRequest::where('reservation_id', '=', $id)->delete();
+            Payment::where('id', '=', $reservation['payment_id'])->delete();
+            Reservation::where('id', '=', $id)->delete();
+
+
             return response([
-                'message' => 'This reservation is already accepted'
+                'message' => 'This hall and its owner have been deleted successfully'
+            ]);
+        }
+        if($reservation ==null){
+            if ($homeReservation['has_recorded']) {
+                return response([
+                    'message' => 'This reservation is already accepted'
+                ]);
+            }
+
+            FoodHome::where('home_reservation_id','=',$id)->delete();
+        Payment::where('id','=',$homeReservation['payment_id'])->delete();
+        HomeReservation::where('id','=',$id)->delete();
+
+            return response([
+                'message' => 'This hall and its owner have been deleted successfully'
             ]);
         }
 
-        FoodRequest::where('reservation_id', '=', $id)->delete();
-        SongRequest::where('reservation_id', '=', $id)->delete();
-        Payment::where('id', '=', $reservation['payment_id'])->delete();
-        Reservation::where('id', '=', $id)->delete();
-
-
-        return response([
-            'message' => 'This hall and its owner have been deleted successfully'
-        ]);
-    }
-}
+}}

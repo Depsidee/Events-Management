@@ -20,7 +20,8 @@ class HomeReservation extends Model
         'date',
         'period',
         'start_time',
-        'total_price'
+        'total_price',
+         'delete_time'
     ];
 
     public function user()
