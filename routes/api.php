@@ -33,7 +33,7 @@ Route::prefix('super_admin')->group(function () {
 
 
         //wallet
-        Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
+        Route::get('showWalllet', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         //song
         Route::post('create/song', [App\Http\Controllers\songController::class, 'create']);
         Route::post('update/song/{id}', [App\Http\Controllers\songController::class, 'updateSong']);
@@ -100,7 +100,7 @@ Route::prefix('admin_hall')->group(function () {
         ///is_block
         Route::get('index_is_Block', [App\Http\Controllers\userController::class, 'index_is_Block']);
         ///wallet
-        Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
+        Route::get('showWalllet', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         //hallViews
         Route::get('show_all_views', [App\Http\Controllers\HallViewController::class, 'index']);
 
@@ -138,9 +138,9 @@ Route::prefix('client')->group(function () {
         ///paid
         Route::get('paid/{id}', [App\Http\Controllers\PaidController::class, 'paid']);
         ///wallet
-        Route::get('showWalllet/{id}', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
+        Route::get('showWalllet', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         Route::post('create/wallet', [App\Http\Controllers\PaidController::class, 'createWallet']);
-        Route::post('update/wallet/{id}', [App\Http\Controllers\PaidController::class, 'updateWalletBalancee']);
+        Route::post('update/wallet', [App\Http\Controllers\PaidController::class, 'updateWalletBalancee']);
 
         //favorite
         Route::post('favorite/add', [App\Http\Controllers\FavoriteController::class, 'changeStatus']);

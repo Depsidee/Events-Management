@@ -40,12 +40,12 @@ class PaidController extends BaseController
     ///////////////////////////
     ///show Wallet:
     ////////////////////////////
-    public function show_Wallet($id)
+    public function show_Wallet()
     {
 
         try {
             $data = [];
-            $data = $this->paidServices->showWallet($id);
+            $data = $this->paidServices->showWallet();
             return ($data);
         } catch (Throwable $th) {
 
@@ -57,11 +57,11 @@ class PaidController extends BaseController
     //update for wallet:
     ////////////////////////////
 
-    public function updateWalletBalancee($id, Request $request)
+    public function updateWalletBalancee(Request $request)
     {
         try {
             $data = [];
-            $data = $this->paidServices->updateWalletBalance($id, $request);
+            $data = $this->paidServices->updateWalletBalance($request);
             return ($data);
         } catch (Throwable $th) {
 

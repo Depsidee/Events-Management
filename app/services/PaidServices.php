@@ -45,20 +45,22 @@ class PaidServices
     /////////////
     //update wallet
     ///////////////////
-    public function updateWalletBalance($id, $request)
+    public function updateWalletBalance($request)
     {
         $valledate = Validator::make($request->all(), [
             'balance' => ['required', 'numeric', 'min:0', 'max:99999999.99']
         ]);
+
         if (Auth::user()->role_name == 'client') {
 
             $wallet = Wallet::where('user_id', Auth::user()->id)->first();
-            if ($wallet->id == $request->id) {
+            if ($wallet) {
                 $newBalance = $wallet->balance + $request->balance;
                 $wallet->update(['balance' => $newBalance]);
                 return [$wallet, 'update done successfully', 202];
-            } else {
-                return ['you don\'t have permission', 403];
+            }
+             else {
+                return ['you don\'t have permission'];
             }
         } else {
             return ['you don\'t have permission', 403];
@@ -66,14 +68,14 @@ class PaidServices
     }
 
     ////////
-    public function showWallet($id)
+    public function showWallet()
     {
-        $wallet = Wallet::find($id);
+        $wallet = Wallet::where('user_id', Auth::user()->id)->first();
 
-        if ($wallet->user_id == Auth::user()->id) {
-            return [$wallet, 'wallet data retrivied successfully', 202];
+        if (!$wallet) {
+            return ['You don/t have a wallet ', 404];
         } else {
-            return ['don\'t have permission to fetch this data', 403];
+            return [$wallet,202];
         }
     }
     ////////////
