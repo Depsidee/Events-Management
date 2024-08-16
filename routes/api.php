@@ -82,6 +82,15 @@ Route::prefix('super_admin')->group(function () {
         Route::get('indexReservationTypes', [App\Http\Controllers\ReservationTypeController::class, 'index']);
         Route::get('reservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'reservationsOfType']);
         Route::get('homeReservationsOfType/{id}', [App\Http\Controllers\ReservationTypeController::class, 'homeReservationsOfType']);
+   //photography
+   Route::post('addPhotography',[\App\Http\Controllers\PhotographyController::class, 'addPhotography']);
+   Route::put('updatePhotography',[\App\Http\Controllers\PhotographyController::class, 'updatePhotography']);
+   Route::delete('deletePhotography/{id}',[\App\Http\Controllers\PhotographyController::class, 'deletePhotography']);
+   Route::get('indexPhotography',[\App\Http\Controllers\PhotographyController::class, 'indexPhotography']);
+
+
+
+
     });
 });
 
@@ -198,5 +207,9 @@ Route::prefix('client')->group(function () {
         //food
         Route::apiResource('foods', \App\Http\Controllers\FoodController::class);
         Route::apiResource('food_categories', \App\Http\Controllers\FoodCategoryController::class);
+        //Photography
+        Route::get('indexPhotography',[\App\Http\Controllers\PhotographyController::class, 'indexPhotography']);
+        Route::get('availablePhotography/{date}',[\App\Http\Controllers\PhotographyController::class, 'availablePhotography']);
+
     });
 });
