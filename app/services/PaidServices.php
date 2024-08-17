@@ -48,12 +48,13 @@ class PaidServices
     public function updateWalletBalance($request)
     {
         $valledate = Validator::make($request->all(), [
+            'email' => ['required', 'string', 'email', 'max:255'],
             'balance' => ['required', 'numeric', 'min:0', 'max:99999999.99']
         ]);
 
-        if (Auth::user()->role_name == 'client') {
+              $user=User::where('email', $request->email)->first();
 
-            $wallet = Wallet::where('user_id', Auth::user()->id)->first();
+            $wallet = Wallet::where('user_id', $user->id)->first();
             if ($wallet) {
                 $newBalance = $wallet->balance + $request->balance;
                 $wallet->update(['balance' => $newBalance]);
@@ -62,9 +63,7 @@ class PaidServices
              else {
                 return ['you don\'t have permission'];
             }
-        } else {
-            return ['you don\'t have permission', 403];
-        }
+
     }
 
     ////////

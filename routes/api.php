@@ -34,6 +34,7 @@ Route::prefix('super_admin')->group(function () {
 
         //wallet
         Route::get('showWalllet', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
+        Route::post('update/wallet', [App\Http\Controllers\PaidController::class, 'updateWalletBalancee']);
         //song
         Route::post('create/song', [App\Http\Controllers\songController::class, 'create']);
         Route::post('update/song/{id}', [App\Http\Controllers\songController::class, 'updateSong']);
@@ -149,7 +150,7 @@ Route::prefix('client')->group(function () {
         ///wallet
         Route::get('showWalllet', [App\Http\Controllers\PaidController::class, 'show_Wallet']);
         Route::post('create/wallet', [App\Http\Controllers\PaidController::class, 'createWallet']);
-        Route::post('update/wallet', [App\Http\Controllers\PaidController::class, 'updateWalletBalancee']);
+
 
         //favorite
         Route::post('favorite/add', [App\Http\Controllers\FavoriteController::class, 'changeStatus']);

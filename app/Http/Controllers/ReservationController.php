@@ -627,15 +627,7 @@ if($homeReservation ==null){
     $body = 'your reservation has been accepted successfully ,Please postpone payment within a week, otherwise the reservation will be automatically deleted.';
  //   dd($tokens);
  $notification = $this->sendNotification($tokens, $title, $body);
- if ($notification) {
-     return response([
-         'message' => 'notification successfully'
-     ]);
- } else {
-     return response([
-         'message' => 'notification isn/t successfully'
-     ]);
- }
+ 
  /////////
     ////////////
 //   dd($notification);
@@ -667,15 +659,7 @@ if($reservation == null){
     $body = 'Your reservation has been accepted successfully. Please postpone payment within a week, otherwise the reservation will be automatically deleted.';
 
     $notification = $this->sendNotification($tokens, $title, $body);
-    if ($notification) {
-        return response([
-            'message' => 'notification successfully'
-        ]);
-    } else {
-        return response([
-            'message' => 'notification isn/t successfully'
-        ]);
-    }
+
     ////////////
     return response()->json([
         'message' => 'This reservation has been accepted successfully',
